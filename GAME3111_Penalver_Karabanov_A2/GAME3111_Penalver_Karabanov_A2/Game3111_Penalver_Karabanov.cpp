@@ -99,6 +99,7 @@ private:
 	void BuildXgeometry();
 	void BuildWallsGeometry();
 	void BuildTowersGeometry();
+	void BuildDiamondGeometry();
 	void BuildTopTowersGeometry();
 	void BuildGateGeometry();
 	void BuildMerlonlGeometry();
@@ -220,6 +221,7 @@ bool TreeBillboardsApp::Initialize()
 	BuildXgeometry();
 	BuildWallsGeometry();
 	BuildTowersGeometry();
+	BuildDiamondGeometry();
 	BuildTopTowersGeometry();
 	BuildGateGeometry();
 	BuildMerlonlGeometry();
@@ -296,7 +298,7 @@ void TreeBillboardsApp::Draw(const GameTimer& gt)
 		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
     // Clear the back buffer and depth buffer.
-    mCommandList->ClearRenderTargetView(CurrentBackBufferView(), (float*)&mMainPassCB.FogColor, 0, nullptr);
+    mCommandList->ClearRenderTargetView(CurrentBackBufferView(), Colors::CornflowerBlue, 0, nullptr);
     mCommandList->ClearDepthStencilView(DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
 
     // Specify the buffers we are going to render to.
@@ -1180,8 +1182,6 @@ void TreeBillboardsApp::BuildTowersGeometry()
 	geo->Name = "TowerGeo"; // Name of unique geometry
 
 
-
-
 	ThrowIfFailed(D3DCreateBlob(vbByteSize, &geo->VertexBufferCPU));
 	CopyMemory(geo->VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
 	ThrowIfFailed(D3DCreateBlob(ibByteSize, &geo->IndexBufferCPU));
@@ -1202,20 +1202,18 @@ void TreeBillboardsApp::BuildTowersGeometry()
 	geo->IndexBufferByteSize = ibByteSize;
 
 
-
 	SubmeshGeometry submesh;
 	submesh.IndexCount = (UINT)indices.size();
 	submesh.StartIndexLocation = 0;
 	submesh.BaseVertexLocation = 0;
 
-
-
-
 	geo->DrawArgs["Tower"] = submesh;
 	mGeometries["TowerGeo"] = std::move(geo);
-
-
-
+}
+void TreeBillboardsApp::BuildDiamondGeometry()
+{
+	GeometryGenerator geoGen;
+	GeometryGenerator::MeshData m_Diamond = geoGen.CreateDiamond(2, 2, 2,4);
 
 }
 void TreeBillboardsApp::BuildTopTowersGeometry()
