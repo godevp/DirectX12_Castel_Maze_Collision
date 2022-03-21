@@ -1885,8 +1885,10 @@ void TreeBillboardsApp::BuildRenderGate()
 
 	auto boxRitem2 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&boxRitem2->World, XMMatrixScaling(0.50f, 0.50f, 0.50f) * XMMatrixTranslation(0.0f, 19.0f, 0.0f));
+	XMStoreFloat4x4(&boxRitem2->TexTransform, XMMatrixScaling(3.0f, 2.0f, 1.0f));
+	
 	boxRitem2->ObjCBIndex = objCBIndex++;
-	boxRitem2->Mat = mMaterials["wirefence"].get();
+	boxRitem2->Mat = mMaterials["sample1"].get();
 	boxRitem2->Geo = mGeometries["xGeo"].get();
 	boxRitem2->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	boxRitem2->IndexCount = boxRitem2->Geo->DrawArgs["x"].IndexCount;
