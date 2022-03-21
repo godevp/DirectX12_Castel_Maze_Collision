@@ -99,6 +99,7 @@ private:
 	void BuildXgeometry();
 	void BuildWallsGeometry();
 	void BuildTowersGeometry();
+	void BuildCylinderGeometry();
 	void BuildDiamondGeometry();
 	void BuildTopTowersGeometry();
 	void BuildGateGeometry();
@@ -221,6 +222,7 @@ bool TreeBillboardsApp::Initialize()
 	BuildXgeometry();
 	BuildWallsGeometry();
 	BuildTowersGeometry();
+	BuildCylinderGeometry();
 	BuildDiamondGeometry();
 	BuildTopTowersGeometry();
 	BuildGateGeometry();
@@ -637,7 +639,7 @@ void TreeBillboardsApp::LoadTextures()
 
 	auto gate = std::make_unique<Texture>();
 	gate->Name = "gate";
-	gate->Filename = L"../../Textures/gate4.dds";
+	gate->Filename = L"../../Textures/gate6.dds";
 	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
 		mCommandList.Get(), gate->Filename.c_str(),
 		gate->Resource, gate->UploadHeap));
@@ -1222,6 +1224,60 @@ void TreeBillboardsApp::BuildTowersGeometry()
 	geo->DrawArgs["Tower"] = submesh;
 	mGeometries["TowerGeo"] = std::move(geo);
 }
+void TreeBillboardsApp::BuildCylinderGeometry()
+{
+	//STEP 1 Define geometry
+	GeometryGenerator geoGen;//Define size
+	GeometryGenerator::MeshData m_Tower = geoGen.CreateCylinder(2.5f, 2.5f, 19.5f, 43, 43);
+
+	std::vector<Vertex> vertices(m_Tower.Vertices.size());
+
+	for (size_t i = 0; i < m_Tower.Vertices.size(); ++i)
+	{
+		auto& p = m_Tower.Vertices[i].Position;
+		vertices[i].Pos = p;
+		vertices[i].Normal = m_Tower.Vertices[i].Normal;
+		vertices[i].TexC = m_Tower.Vertices[i].TexC;
+	}
+
+
+	const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
+	std::vector<std::uint16_t> indices = m_Tower.GetIndices16();
+	const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
+
+	auto geo = std::make_unique<MeshGeometry>();
+	geo->Name = "cylinderGeo"; // Name of unique geometry
+
+
+	ThrowIfFailed(D3DCreateBlob(vbByteSize, &geo->VertexBufferCPU));
+	CopyMemory(geo->VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
+	ThrowIfFailed(D3DCreateBlob(ibByteSize, &geo->IndexBufferCPU));
+	CopyMemory(geo->IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
+
+
+
+	geo->VertexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(),
+		mCommandList.Get(), vertices.data(), vbByteSize, geo->VertexBufferUploader);
+	geo->IndexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(),
+		mCommandList.Get(), indices.data(), ibByteSize, geo->IndexBufferUploader);
+
+
+
+	geo->VertexByteStride = sizeof(Vertex);
+	geo->VertexBufferByteSize = vbByteSize;
+	geo->IndexFormat = DXGI_FORMAT_R16_UINT;
+	geo->IndexBufferByteSize = ibByteSize;
+
+
+	SubmeshGeometry submesh;
+	submesh.IndexCount = (UINT)indices.size();
+	submesh.StartIndexLocation = 0;
+	submesh.BaseVertexLocation = 0;
+
+	geo->DrawArgs["cylinder"] = submesh;
+	mGeometries["cylinderGeo"] = std::move(geo);
+
+}
 void TreeBillboardsApp::BuildDiamondGeometry()
 {
 	GeometryGenerator geoGen;
@@ -1627,7 +1683,8 @@ void TreeBillboardsApp::BuildRenderItems()
 	UINT objCBIndex = 4;
     auto wavesRitem = std::make_unique<RenderItem>();
     wavesRitem->World = MathHelper::Identity4x4();
-	XMStoreFloat4x4(&wavesRitem->TexTransform, XMMatrixScaling(5.0f, 5.0f, 1.0f));
+	XMStoreFloat4x4(&wavesRitem->TexTransform, XMMatrixScaling(15.0f, 15.0f, 1.0f));
+	XMStoreFloat4x4(&wavesRitem->World, XMMatrixScaling(2.0f, 1.0f, 2.0f));
 	wavesRitem->ObjCBIndex = 0;
 	wavesRitem->Mat = mMaterials["water"].get();
 	wavesRitem->Geo = mGeometries["waterGeo"].get();
@@ -1645,25 +1702,25 @@ void TreeBillboardsApp::BuildRenderItems()
 	XMStoreFloat4x4(&gridRitem->TexTransform, XMMatrixScaling(5.0f, 5.0f, 1.0f));
 	gridRitem->ObjCBIndex = 1;
 	gridRitem->Mat = mMaterials["grass"].get();
-	gridRitem->Geo = mGeometries["TowerGeo"].get();
+	gridRitem->Geo = mGeometries["cylinderGeo"].get();
 	gridRitem->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-    gridRitem->IndexCount = gridRitem->Geo->DrawArgs["Tower"].IndexCount;
-    gridRitem->StartIndexLocation = gridRitem->Geo->DrawArgs["Tower"].StartIndexLocation;
-    gridRitem->BaseVertexLocation = gridRitem->Geo->DrawArgs["Tower"].BaseVertexLocation;
+    gridRitem->IndexCount = gridRitem->Geo->DrawArgs["cylinder"].IndexCount;
+    gridRitem->StartIndexLocation = gridRitem->Geo->DrawArgs["cylinder"].StartIndexLocation;
+    gridRitem->BaseVertexLocation = gridRitem->Geo->DrawArgs["cylinder"].BaseVertexLocation;
 
 	mRitemLayer[(int)RenderLayer::Opaque].push_back(gridRitem.get());
 
 	auto boxRitem = std::make_unique<RenderItem>();
-	XMStoreFloat4x4(&boxRitem->World, XMMatrixTranslation(0.0f, 1.0f, -0.0f));
+	XMStoreFloat4x4(&boxRitem->World, XMMatrixTranslation(0.0f, 0.7f, -0.0f));
 	XMStoreFloat4x4(&boxRitem->World, XMMatrixScaling(25.0f, 0.1f, 25.0f));
-	XMStoreFloat4x4(&boxRitem->TexTransform, XMMatrixScaling(5.0f, 5.0f, 5.0f));
+	XMStoreFloat4x4(&boxRitem->TexTransform, XMMatrixScaling(25.0f, 25.0f, 25.0f));
 	boxRitem->ObjCBIndex = 2;
 	boxRitem->Mat = mMaterials["grass"].get();
-	boxRitem->Geo = mGeometries["TowerGeo"].get();
+	boxRitem->Geo = mGeometries["cylinderGeo"].get();
 	boxRitem->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	boxRitem->IndexCount = boxRitem->Geo->DrawArgs["Tower"].IndexCount;
-	boxRitem->StartIndexLocation = boxRitem->Geo->DrawArgs["Tower"].StartIndexLocation;
-	boxRitem->BaseVertexLocation = boxRitem->Geo->DrawArgs["Tower"].BaseVertexLocation;
+	boxRitem->IndexCount = boxRitem->Geo->DrawArgs["cylinder"].IndexCount;
+	boxRitem->StartIndexLocation = boxRitem->Geo->DrawArgs["cylinder"].StartIndexLocation;
+	boxRitem->BaseVertexLocation = boxRitem->Geo->DrawArgs["cylinder"].BaseVertexLocation;
 
 	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(boxRitem.get());
 
@@ -2067,7 +2124,7 @@ void TreeBillboardsApp::BuildRenderGate()
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////																									
 	auto mainGate = std::make_unique<RenderItem>();																		  //
 																														  //
-	XMStoreFloat4x4(&mainGate->World, XMMatrixScaling(14.0f, 14.8f, 3.0f) * XMMatrixTranslation(0.0f, 7.1f, -25.0f));    //
+	XMStoreFloat4x4(&mainGate->World, XMMatrixScaling(14.0f, 14.8f, 3.0f) * XMMatrixTranslation(0.0f, 8.0f, -25.0f));    //
 	mainGate->ObjCBIndex = objCBIndex++;//
 	mainGate->Mat = mMaterials["gate"].get();
 	mainGate->Geo = mGeometries["GateGeo"].get();
@@ -2082,7 +2139,7 @@ void TreeBillboardsApp::BuildRenderGate()
 	//
 
 	auto separationGate = std::make_unique<RenderItem>();																   //													  //
-	XMStoreFloat4x4(&separationGate->World, XMMatrixScaling(0.1f, 14.8f, 3.2f) * XMMatrixTranslation(0.0f, 7.1f, -25.0f));//
+	XMStoreFloat4x4(&separationGate->World, XMMatrixScaling(0.1f, 14.8f, 3.2f) * XMMatrixTranslation(0.0f, 8.0f, -25.0f));//
 																														   //
 	separationGate->ObjCBIndex = objCBIndex++;//
 	separationGate->Mat = mMaterials["wirefence"].get();
