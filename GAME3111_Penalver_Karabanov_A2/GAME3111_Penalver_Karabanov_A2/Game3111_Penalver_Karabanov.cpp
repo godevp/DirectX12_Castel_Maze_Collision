@@ -210,7 +210,7 @@ bool TreeBillboardsApp::Initialize()
     mCbvSrvDescriptorSize = md3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
     mWaves = std::make_unique<Waves>(200, 200, 2.0f, 0.03f, 4.0f, 0.2f);
- 
+	
 	LoadTextures();
     BuildRootSignature();
 	BuildDescriptorHeaps();
@@ -233,7 +233,7 @@ bool TreeBillboardsApp::Initialize()
 	BuildRenderGate();
 	BuildFrameResources();
     BuildPSOs();
-
+	
     // Execute the initialization commands.
     ThrowIfFailed(mCommandList->Close());
     ID3D12CommandList* cmdsLists[] = { mCommandList.Get() };
@@ -400,6 +400,7 @@ void TreeBillboardsApp::OnKeyboardInput(const GameTimer& gt)
  
 void TreeBillboardsApp::UpdateCamera(const GameTimer& gt)
 {
+	
 	// Convert Spherical to Cartesian coordinates.
 	mEyePos.x = mRadius*sinf(mPhi)*cosf(mTheta);
 	mEyePos.z = mRadius*sinf(mPhi)*sinf(mTheta);
@@ -507,7 +508,9 @@ void TreeBillboardsApp::UpdateMainPassCB(const GameTimer& gt)
 	mMainPassCB.EyePosW = mEyePos;
 	mMainPassCB.RenderTargetSize = XMFLOAT2((float)mClientWidth, (float)mClientHeight);
 	mMainPassCB.InvRenderTargetSize = XMFLOAT2(1.0f / mClientWidth, 1.0f / mClientHeight);
-	mMainPassCB.NearZ = 1.0f;
+
+	
+	mMainPassCB.NearZ = 20.0f;
 	mMainPassCB.FarZ = 1000.0f;
 	mMainPassCB.TotalTime = gt.TotalTime();
 	mMainPassCB.DeltaTime = gt.DeltaTime();
@@ -2154,7 +2157,7 @@ void TreeBillboardsApp::BuildRenderGate()
 	// 
 
 	auto boxRitem2 = std::make_unique<RenderItem>();
-	XMStoreFloat4x4(&boxRitem2->World, XMMatrixScaling(0.50f, 1.2f, 0.50f) * XMMatrixTranslation(0.0f, 11.5f, 0.0f));
+	XMStoreFloat4x4(&boxRitem2->World, XMMatrixScaling(0.650f, 1.2f, 0.650f) * XMMatrixTranslation(0.0f, 11.5f, 0.0f));
 	XMStoreFloat4x4(&boxRitem2->TexTransform, XMMatrixScaling(3.0f, 2.0f, 1.0f));
 	
 	boxRitem2->ObjCBIndex = objCBIndex++;
