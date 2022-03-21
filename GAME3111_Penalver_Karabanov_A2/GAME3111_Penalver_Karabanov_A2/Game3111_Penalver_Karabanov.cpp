@@ -207,7 +207,7 @@ bool TreeBillboardsApp::Initialize()
 	// so we have to query this information.
     mCbvSrvDescriptorSize = md3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-    mWaves = std::make_unique<Waves>(200, 200, 1.0f, 0.03f, 4.0f, 0.2f);
+    mWaves = std::make_unique<Waves>(200, 200, 2.0f, 0.03f, 4.0f, 0.2f);
  
 	LoadTextures();
     BuildRootSignature();
@@ -508,20 +508,27 @@ void TreeBillboardsApp::UpdateMainPassCB(const GameTimer& gt)
 	mMainPassCB.TotalTime = gt.TotalTime();
 	mMainPassCB.DeltaTime = gt.DeltaTime();
 	mMainPassCB.AmbientLight = { 0.25f, 0.25f, 0.25f, 1.0f };
+	//direction light
 	mMainPassCB.Lights[0].Direction = { 0.0f, -0.27735f, 0.57735f };
 	mMainPassCB.Lights[0].Strength = { 0.3f, 0.3f, 0.5f };
 
-
-	mMainPassCB.Lights[1].Position = { -0.0f, 1.0f, -34.0f };
-	mMainPassCB.Lights[1].Direction = { 0.0f, -0.57735f, 0.0f };
-	mMainPassCB.Lights[1].Strength = { 0.15f, 0.35f, 0.15f };
-	mMainPassCB.Lights[1].SpotPower = 0.75;
-
-
-	mMainPassCB.Lights[2].Position = { -0.0f, 1.0f, -0.0f };
-	mMainPassCB.Lights[2].Direction = { 0.0f, -0.57735f, 0.0f };
-	mMainPassCB.Lights[2].Strength = { 0.15f, 0.35f, 0.15f };
-	mMainPassCB.Lights[2].SpotPower = 0.75;
+	//point lights
+																									   //
+	mMainPassCB.Lights[1].Position = { -16.5f, 15.5f, +16.5f };										   //
+	mMainPassCB.Lights[1].Strength = { 255.0f/4.0f, 192.0f / 4.0f, 203.0f / 4.0f };					   //
+																									   //
+	mMainPassCB.Lights[2].Position = { 16.5f, 15.5f, +16.5f };										   //
+	mMainPassCB.Lights[2].Strength = { 255.0f / 4.0f, 192.0f / 4.0f, 203.0f / 4.0f };				   //
+																									   // lights for the towers
+	mMainPassCB.Lights[3].Position = { -16.5f, 15.5f, -16.5f };										   //
+	mMainPassCB.Lights[3].Strength = { 255.0f / 4.0f, 192.0f / 4.0f, 203.0f / 4.0f };				   //
+																									   //
+	mMainPassCB.Lights[4].Position = { 16.5f, 15.5f, -16.5f };										   //
+	mMainPassCB.Lights[4].Strength = { 255.0f / 4.0f, 192.0f / 4.0f, 203.0f / 4.0f };				   //
+																
+																									   
+	mMainPassCB.Lights[5].Position = { 0.0f, 26.0f, 0.0f };										   //Centre light
+	mMainPassCB.Lights[5].Strength = { 200.0f / 4.0f, 0.0f / 4.0f, 0.0f / 4.0f };				   //
 
 
 	auto currPassCB = mCurrFrameResource->PassCB.get();
@@ -593,7 +600,7 @@ void TreeBillboardsApp::LoadTextures()
 
 	auto treeArrayTex = std::make_unique<Texture>();
 	treeArrayTex->Name = "treeArrayTex";
-	treeArrayTex->Filename = L"../../Textures/treeArray.dds";
+	treeArrayTex->Filename = L"../../Textures/tree01S.dds";
 	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
 		mCommandList.Get(), treeArrayTex->Filename.c_str(),
 		treeArrayTex->Resource, treeArrayTex->UploadHeap));
@@ -913,7 +920,7 @@ void TreeBillboardsApp::BuildWavesGeometry()
 void TreeBillboardsApp::BuildBoxGeometry()
 {
 	GeometryGenerator geoGen;
-	GeometryGenerator::MeshData box = geoGen.CreateBox(20.0f, 20.0f, 20.0f, 2);
+	GeometryGenerator::MeshData box = geoGen.CreateBox(85.0f, 0.2f, 85.0f, 0);
 
 	std::vector<Vertex> vertices(box.Vertices.size());
 	for (size_t i = 0; i < box.Vertices.size(); ++i)
@@ -970,11 +977,40 @@ void TreeBillboardsApp::BuildTreeSpritesGeometry()
 
 	static const int treeCount = 6;
 	std::array<TreeSpriteVertex, 16> vertices;
+	float x, z;
 	for(UINT i = 0; i < treeCount; ++i)
 	{
-		float x = MathHelper::RandF(-45.0f, 45.0f);
-		float z = MathHelper::RandF(-45.0f, 45.0f);
-		float y = 1.0f;
+		switch (i)
+		{
+		case 0:
+			x = -40.0f;
+			z = -40.0f;
+			break;
+		case 1:
+			x = 40.0f;
+			z = -40.0f;
+			break;
+		case 2:
+			x = 40.0f;
+			z = 40.0f;
+			break;
+		case 3:
+			x = -40.0f;
+			z = 40.0f;
+			break;
+		case 4:
+			x = -40;
+			z = 0.0f;
+			break;
+		case 5:
+			x = 40;
+			z = 0.0f;
+			break;
+
+		default:
+			break;
+		}
+		float y = 2.5f;
 
 		// Move tree slightly above land height.
 		y += 8.0f;
@@ -1443,6 +1479,8 @@ void TreeBillboardsApp::BuildMaterials()
 	grass->FresnelR0 = XMFLOAT3(0.01f, 0.01f, 0.01f);
 	grass->Roughness = 0.125f;
 
+
+
 	// This is not a good water material definition, but we do not have all the rendering
 	// tools we need (transparency, environment reflection), so we fake it for now.
 	auto water = std::make_unique<Material>();
@@ -1547,9 +1585,9 @@ void TreeBillboardsApp::BuildRenderItems()
 	mRitemLayer[(int)RenderLayer::Opaque].push_back(gridRitem.get());
 
 	auto boxRitem = std::make_unique<RenderItem>();
-	XMStoreFloat4x4(&boxRitem->World, XMMatrixTranslation(0.0f, 0.0f, -0.0f));
+	XMStoreFloat4x4(&boxRitem->World, XMMatrixTranslation(0.0f, 1.0f, -0.0f));
 	boxRitem->ObjCBIndex = 2;
-	boxRitem->Mat = mMaterials["wirefence"].get();
+	boxRitem->Mat = mMaterials["grass"].get();
 	boxRitem->Geo = mGeometries["boxGeo"].get();
 	boxRitem->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	boxRitem->IndexCount = boxRitem->Geo->DrawArgs["box"].IndexCount;
@@ -1571,16 +1609,6 @@ void TreeBillboardsApp::BuildRenderItems()
 
 	mRitemLayer[(int)RenderLayer::AlphaTestedTreeSprites].push_back(treeSpritesRitem.get());
 
-	//auto boxRitem2 = std::make_unique<RenderItem>();
-	//XMStoreFloat4x4(&boxRitem2->World, XMMatrixScaling(33.0f, 1.0f, 1.0f) * XMMatrixTranslation(0.0f,0.0f,0.0f)); // NOT MOVING 
-	//boxRitem2->ObjCBIndex = 4;
-	//boxRitem2->Mat = mMaterials["sample1"].get();
-	//boxRitem2->Geo = mGeometries["boxGeo"].get();
-	//boxRitem2->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	//boxRitem2->IndexCount = boxRitem2->Geo->DrawArgs["box"].IndexCount;
-	//boxRitem2->StartIndexLocation = boxRitem2->Geo->DrawArgs["box"].StartIndexLocation;
-	//boxRitem2->BaseVertexLocation = boxRitem2->Geo->DrawArgs["box"].BaseVertexLocation;
-	//mRitemLayer[(int)RenderLayer::AlphaTested].push_back(boxRitem2.get());
 
 	auto m_Wall_R1 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&m_Wall_R1->TexTransform, XMMatrixScaling(5.0f, 5.0f, 2.0f));
@@ -1661,7 +1689,7 @@ void TreeBillboardsApp::BuildRenderTowers()
 	leftTowerUP->ObjCBIndex = objCBIndex++;
 	RooftleftTowerUP->ObjCBIndex = objCBIndex++;
 
-	leftTowerUP->Mat = mMaterials["sample1"].get();
+	leftTowerUP->Mat = mMaterials["wall"].get();
 	RooftleftTowerUP->Mat = mMaterials["wall3"].get();
 
 
@@ -1700,7 +1728,7 @@ void TreeBillboardsApp::BuildRenderTowers()
 	leftTowerDOWN->ObjCBIndex = objCBIndex++;
 	RooftleftTowerDOWN->ObjCBIndex = objCBIndex++;
 
-	leftTowerDOWN->Mat = mMaterials["wirefence"].get();
+	leftTowerDOWN->Mat = mMaterials["wall"].get();
 	RooftleftTowerDOWN->Mat = mMaterials["wall3"].get();
 
 
@@ -1742,7 +1770,7 @@ void TreeBillboardsApp::BuildRenderTowers()
 	rightTowerUP->ObjCBIndex = objCBIndex++;
 	RoofrightTowerUP->ObjCBIndex = objCBIndex++;
 
-	rightTowerUP->Mat = mMaterials["wirefence"].get();
+	rightTowerUP->Mat = mMaterials["wall"].get();
 	RoofrightTowerUP->Mat = mMaterials["wall3"].get();
 
 
@@ -1783,7 +1811,7 @@ void TreeBillboardsApp::BuildRenderTowers()
 
 	rightTowerDown->ObjCBIndex = objCBIndex++;
 	RooftrightTowerDown->ObjCBIndex = objCBIndex++;
-	rightTowerDown->Mat = mMaterials["wirefence"].get();
+	rightTowerDown->Mat = mMaterials["wall"].get();
 	RooftrightTowerDown->Mat = mMaterials["wall3"].get();
 
 	rightTowerDown->Geo = mGeometries["TowerGeo"].get();
@@ -1822,7 +1850,7 @@ void TreeBillboardsApp::BuildRenderTowers()
 	leftTowerUPInner->ObjCBIndex = objCBIndex++;
 	RooftleftTowerUPInner->ObjCBIndex = objCBIndex++;
 
-	leftTowerUPInner->Mat = mMaterials["wirefence"].get();
+	leftTowerUPInner->Mat = mMaterials["sample1"].get();
 	RooftleftTowerUPInner->Mat = mMaterials["wall3"].get();
 
 
@@ -1847,10 +1875,122 @@ void TreeBillboardsApp::BuildRenderTowers()
 	mAllRitems.push_back(std::move(leftTowerUPInner));
 	mAllRitems.push_back(std::move(RooftleftTowerUPInner));
 
+	//Right TOWER - UP - INNER/////////////////////////////////////
+	auto rightTowerUPInner = std::make_unique<RenderItem>();
+	auto RooftrightTowerUPInner = std::make_unique<RenderItem>();
+	XMMATRIX rightTowerWorldInner = XMMatrixScaling(1.0f, 1.5f, 1.0f) * XMMatrixTranslation(9.5f, 14.0f, +9.5f);
+	XMMATRIX RooftrightTowerUPWorldInner = XMMatrixScaling(2.0f, 2.0f, 2.0f) * XMMatrixTranslation(9.5f, 32.0f, +9.5f);
+
+	XMStoreFloat4x4(&rightTowerUPInner->World, rightTowerWorldInner);
+	XMStoreFloat4x4(&RooftrightTowerUPInner->World, RooftrightTowerUPWorldInner);
+
+	rightTowerUPInner->ObjCBIndex = objCBIndex++;
+	RooftrightTowerUPInner->ObjCBIndex = objCBIndex++;
+
+	rightTowerUPInner->Mat = mMaterials["sample1"].get();
+	RooftrightTowerUPInner->Mat = mMaterials["wall3"].get();
+
+
+	rightTowerUPInner->Geo = mGeometries["TowerGeo"].get();
+	RooftrightTowerUPInner->Geo = mGeometries["TowerTopGeo"].get();
+	rightTowerUPInner->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	RooftrightTowerUPInner->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	rightTowerUPInner->IndexCount = rightTowerUPInner->Geo->DrawArgs["Tower"].IndexCount;
+	RooftrightTowerUPInner->IndexCount = RooftrightTowerUPInner->Geo->DrawArgs["TowerTop"].IndexCount;
+
+
+	rightTowerUPInner->StartIndexLocation = rightTowerUPInner->Geo->DrawArgs["Tower"].StartIndexLocation;
+	RooftrightTowerUPInner->StartIndexLocation = RooftrightTowerUPInner->Geo->DrawArgs["TowerTop"].StartIndexLocation;
+
+	rightTowerUPInner->BaseVertexLocation = rightTowerUPInner->Geo->DrawArgs["Tower"].BaseVertexLocation;
+	RooftrightTowerUPInner->BaseVertexLocation = RooftrightTowerUPInner->Geo->DrawArgs["TowerTop"].BaseVertexLocation;
+
+	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(rightTowerUPInner.get());
+	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(RooftrightTowerUPInner.get());
+
+	mAllRitems.push_back(std::move(rightTowerUPInner));
+	mAllRitems.push_back(std::move(RooftrightTowerUPInner));
+
+	//LEFT TOWER - BOT - INNER/////////////////////////////////////
+	auto leftTowerBOTInner = std::make_unique<RenderItem>();
+	auto RooftleftTowerBOTInner = std::make_unique<RenderItem>();
+	XMMATRIX leftTowerWorldInner1 = XMMatrixScaling(1.0f, 1.5f, 1.0f) * XMMatrixTranslation(-9.5f, 14.0f, -9.5f);
+	XMMATRIX RooftleftTowerBOTWorldInner = XMMatrixScaling(2.0f, 2.0f, 2.0f) * XMMatrixTranslation(-9.5f, 32.0f, -9.5f);
+
+	XMStoreFloat4x4(&leftTowerBOTInner->World, leftTowerWorldInner1);
+	XMStoreFloat4x4(&RooftleftTowerBOTInner->World, RooftleftTowerBOTWorldInner);
+
+	leftTowerBOTInner->ObjCBIndex = objCBIndex++;
+	RooftleftTowerBOTInner->ObjCBIndex = objCBIndex++;
+
+	leftTowerBOTInner->Mat = mMaterials["sample1"].get();
+	RooftleftTowerBOTInner->Mat = mMaterials["wall3"].get();
+
+
+	leftTowerBOTInner->Geo = mGeometries["TowerGeo"].get();
+	RooftleftTowerBOTInner->Geo = mGeometries["TowerTopGeo"].get();
+	leftTowerBOTInner->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	RooftleftTowerBOTInner->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	leftTowerBOTInner->IndexCount = leftTowerBOTInner->Geo->DrawArgs["Tower"].IndexCount;
+	RooftleftTowerBOTInner->IndexCount = RooftleftTowerBOTInner->Geo->DrawArgs["TowerTop"].IndexCount;
+
+
+	leftTowerBOTInner->StartIndexLocation = leftTowerBOTInner->Geo->DrawArgs["Tower"].StartIndexLocation;
+	RooftleftTowerBOTInner->StartIndexLocation = RooftleftTowerBOTInner->Geo->DrawArgs["TowerTop"].StartIndexLocation;
+
+	leftTowerBOTInner->BaseVertexLocation = leftTowerBOTInner->Geo->DrawArgs["Tower"].BaseVertexLocation;
+	RooftleftTowerBOTInner->BaseVertexLocation = RooftleftTowerBOTInner->Geo->DrawArgs["TowerTop"].BaseVertexLocation;
+
+	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(leftTowerBOTInner.get());
+	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(RooftleftTowerBOTInner.get());
+
+	mAllRitems.push_back(std::move(leftTowerBOTInner));
+	mAllRitems.push_back(std::move(RooftleftTowerBOTInner));
+
+	//Right TOWER - BOT - INNER/////////////////////////////////////
+	auto rightTowerBOTInner = std::make_unique<RenderItem>();
+	auto RooftrightTowerBOTInner = std::make_unique<RenderItem>();
+	XMMATRIX rightTowerWorldInner1 = XMMatrixScaling(1.0f, 1.5f, 1.0f) * XMMatrixTranslation(9.5f, 14.0f, -9.5f);
+	XMMATRIX RooftrightTowerBOTWorldInner = XMMatrixScaling(2.0f, 2.0f, 2.0f) * XMMatrixTranslation(9.5f, 32.0f, -9.5f);
+
+	XMStoreFloat4x4(&rightTowerBOTInner->World, rightTowerWorldInner1);
+	XMStoreFloat4x4(&RooftrightTowerBOTInner->World, RooftrightTowerBOTWorldInner);
+
+	rightTowerBOTInner->ObjCBIndex = objCBIndex++;
+	RooftrightTowerBOTInner->ObjCBIndex = objCBIndex++;
+
+	rightTowerBOTInner->Mat = mMaterials["sample1"].get();
+	RooftrightTowerBOTInner->Mat = mMaterials["wall3"].get();
+
+
+	rightTowerBOTInner->Geo = mGeometries["TowerGeo"].get();
+	RooftrightTowerBOTInner->Geo = mGeometries["TowerTopGeo"].get();
+	rightTowerBOTInner->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	RooftrightTowerBOTInner->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	rightTowerBOTInner->IndexCount = rightTowerBOTInner->Geo->DrawArgs["Tower"].IndexCount;
+	RooftrightTowerBOTInner->IndexCount = RooftrightTowerBOTInner->Geo->DrawArgs["TowerTop"].IndexCount;
+
+
+	rightTowerBOTInner->StartIndexLocation = rightTowerBOTInner->Geo->DrawArgs["Tower"].StartIndexLocation;
+	RooftrightTowerBOTInner->StartIndexLocation = RooftrightTowerBOTInner->Geo->DrawArgs["TowerTop"].StartIndexLocation;
+
+	rightTowerBOTInner->BaseVertexLocation = rightTowerBOTInner->Geo->DrawArgs["Tower"].BaseVertexLocation;
+	RooftrightTowerBOTInner->BaseVertexLocation = RooftrightTowerBOTInner->Geo->DrawArgs["TowerTop"].BaseVertexLocation;
+
+	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(rightTowerBOTInner.get());
+	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(RooftrightTowerBOTInner.get());
+
+	mAllRitems.push_back(std::move(rightTowerBOTInner));
+	mAllRitems.push_back(std::move(RooftrightTowerBOTInner));
+	
+
 }
 void TreeBillboardsApp::BuildRenderGate() 
 {
-	UINT objCBIndex = 18;
+	UINT objCBIndex = 24;
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////																									
@@ -1884,7 +2024,7 @@ void TreeBillboardsApp::BuildRenderGate()
 	// 
 
 	auto boxRitem2 = std::make_unique<RenderItem>();
-	XMStoreFloat4x4(&boxRitem2->World, XMMatrixScaling(0.50f, 0.50f, 0.50f) * XMMatrixTranslation(0.0f, 19.0f, 0.0f));
+	XMStoreFloat4x4(&boxRitem2->World, XMMatrixScaling(0.50f, 1.2f, 0.50f) * XMMatrixTranslation(0.0f, 11.5f, 0.0f));
 	XMStoreFloat4x4(&boxRitem2->TexTransform, XMMatrixScaling(3.0f, 2.0f, 1.0f));
 	
 	boxRitem2->ObjCBIndex = objCBIndex++;
@@ -1898,18 +2038,7 @@ void TreeBillboardsApp::BuildRenderGate()
 	mAllRitems.push_back(std::move(boxRitem2));
 
 
-	auto Merlons2 = std::make_unique<RenderItem>();
 
-	XMStoreFloat4x4(&Merlons2->World, XMMatrixScaling(10.0f, 5.0f, 10.0f) * XMMatrixTranslation(0.0f, 26.0f, 0.0f) * XMMatrixRotationY(150.0f));
-	Merlons2->ObjCBIndex = objCBIndex++;
-	Merlons2->Mat = mMaterials["wall3"].get();
-	Merlons2->Geo = mGeometries["MerlonGeo"].get();
-	Merlons2->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	Merlons2->IndexCount = Merlons2->Geo->DrawArgs["Merlon"].IndexCount;
-	Merlons2->StartIndexLocation = Merlons2->Geo->DrawArgs["Merlon"].StartIndexLocation;
-	Merlons2->BaseVertexLocation = Merlons2->Geo->DrawArgs["Merlon"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(Merlons2.get());
-	mAllRitems.push_back(std::move(Merlons2));
 	// 
 	// 
 	// 

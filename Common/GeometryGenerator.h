@@ -109,6 +109,11 @@ public:
 	/// Creates a quad aligned with the screen.  This is useful for postprocessing and screen effects.
 	///</summary>
     MeshData CreateQuad(float x, float y, float w, float h, float depth);
+
+	///<summary>
+	/// Creates a diamond centered at the origin with the given dimensions
+	///</summary>
+	MeshData CreateDiamond(float width, float height, float depth, uint32 numSubdivisions);
 	void Subdivide(MeshData& meshData);
 private:
 	
