@@ -545,10 +545,10 @@ void TreeBillboardsApp::UpdateWaves(const GameTimer& gt)
 	{
 		t_base += 0.25f;
 
-		int i = MathHelper::Rand(4, mWaves->RowCount() - 5);
-		int j = MathHelper::Rand(4, mWaves->ColumnCount() - 5);
+		int i = MathHelper::Rand(6, mWaves->RowCount() - 5);
+		int j = MathHelper::Rand(6, mWaves->ColumnCount() - 5);
 
-		float r = MathHelper::RandF(0.2f, 0.5f);
+		float r = MathHelper::RandF(0.1f, 0.3f);
 
 		mWaves->Disturb(i, j, r);
 	}
@@ -823,7 +823,7 @@ void TreeBillboardsApp::BuildLandGeometry()
     {
         auto& p = grid.Vertices[i].Position;
         vertices[i].Pos = p;
-        vertices[i].Pos.y = GetHillsHeight(p.x, p.z);
+        vertices[i].Pos.y = -2.0f;
         vertices[i].Normal = GetHillsNormal(p.x, p.z);
 		vertices[i].TexC = grid.Vertices[i].TexC;
     }
@@ -2035,6 +2035,18 @@ void TreeBillboardsApp::BuildRenderGate()
 	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(boxRitem2.get());
 	mAllRitems.push_back(std::move(boxRitem2));
 
+	auto Merlons2 = std::make_unique<RenderItem>();
+
+	XMStoreFloat4x4(&Merlons2->World, XMMatrixScaling(10.0f, 20.0f, 10.0f) * XMMatrixTranslation(0.0f, 33.0f, 0.0f) * XMMatrixRotationY(150.0f));
+	Merlons2->ObjCBIndex = objCBIndex++;
+	Merlons2->Mat = mMaterials["wall2"].get();
+	Merlons2->Geo = mGeometries["MerlonGeo"].get();
+	Merlons2->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	Merlons2->IndexCount = Merlons2->Geo->DrawArgs["Merlon"].IndexCount;
+	Merlons2->StartIndexLocation = Merlons2->Geo->DrawArgs["Merlon"].StartIndexLocation;
+	Merlons2->BaseVertexLocation = Merlons2->Geo->DrawArgs["Merlon"].BaseVertexLocation;
+	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(Merlons2.get());
+	mAllRitems.push_back(std::move(Merlons2));
 
 
 	// 
@@ -2064,7 +2076,7 @@ void TreeBillboardsApp::BuildRenderGate()
 		}
 
 		Merlons->ObjCBIndex = objCBIndex++;//
-		Merlons->Mat = mMaterials["wall2"].get();
+		Merlons->Mat = mMaterials["sample1"].get();
 		Merlons->Geo = mGeometries["MerlonGeo"].get();
 		Merlons->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 		Merlons->IndexCount = Merlons->Geo->DrawArgs["Merlon"].IndexCount;
