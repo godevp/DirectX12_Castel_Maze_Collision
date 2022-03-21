@@ -113,7 +113,7 @@ public:
 	///<summary>
 	/// Creates a diamond centered at the origin with the given dimensions
 	///</summary>
-	MeshData CreateDiamond(float width, float height, float depth, uint32 numSubdivisions);
+	MeshData CreateDiamond(float radius, uint32 sliceCount, uint32 stackCount);
 	void Subdivide(MeshData& meshData);
 private:
 	
