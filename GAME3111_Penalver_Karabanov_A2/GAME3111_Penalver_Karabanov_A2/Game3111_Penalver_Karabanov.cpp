@@ -114,6 +114,7 @@ private:
     void BuildMaterials();
     void BuildRenderItems();
 	void BuildRenderTowers();
+	void BuildRotationItems();
 	void BuildRenderGate();
 	void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<RenderItem*>& ritems);
 
@@ -211,7 +212,7 @@ bool FinalApp::Initialize()
     // Get the increment size of a descriptor in this heap type.  This is hardware specific, 
 	// so we have to query this information.
     mCbvSrvDescriptorSize = md3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	mCamera.SetPosition(0.0f, 2.0f, -15.0f);
+	mCamera.SetPosition(0.0f, 40.0f, -65.0f);
     mWaves = std::make_unique<Waves>(200, 200, 2.0f, 0.03f, 4.0f, 0.2f);
 	
 	LoadTextures();
@@ -233,6 +234,7 @@ bool FinalApp::Initialize()
 	BuildMaterials();
     BuildRenderItems();
 	BuildRenderTowers();
+	BuildRotationItems();
 	BuildRenderGate();
 	BuildFrameResources();
     BuildPSOs();
@@ -281,6 +283,7 @@ void FinalApp::Update(const GameTimer& gt)
 	UpdateMaterialCBs(gt);
 	UpdateMainPassCB(gt);
     UpdateWaves(gt);
+	BuildRotationItems();
 
 }
 
@@ -528,7 +531,7 @@ void FinalApp::UpdateMainPassCB(const GameTimer& gt)
 	mMainPassCB.FarZ = 2000.0f;
 	mMainPassCB.TotalTime = gt.TotalTime();
 	mMainPassCB.DeltaTime = gt.DeltaTime();
-	mMainPassCB.AmbientLight = { 0.25f, 0.25f, 0.25f, 1.0f };
+	mMainPassCB.AmbientLight = { 0.325f, 0.325f, 0.325f, 1.0f };
 	//direction light
 	mMainPassCB.Lights[0].Direction = { 0.0f, -0.27735f, 0.57735f };
 	mMainPassCB.Lights[0].Strength = { 0.3f, 0.3f, 0.5f };
@@ -548,9 +551,26 @@ void FinalApp::UpdateMainPassCB(const GameTimer& gt)
 	mMainPassCB.Lights[4].Strength = { 255.0f / 4.0f, 192.0f / 4.0f, 203.0f / 4.0f };				   //
 																
 																									   
-	mMainPassCB.Lights[5].Position = { 0.0f, 45.0f, 0.0f };										   //Centre light
-	mMainPassCB.Lights[5].Strength = { 200.0f / 4.0f, 0.0f / 4.0f, 0.0f / 4.0f };				   //
+	mMainPassCB.Lights[5].Position = { 0.0f, 30.0f, 0.0f };										   //Centre light
+	mMainPassCB.Lights[5].Strength = { 5.35f, 5.35f, 5.35f };
+	//mMainPassCB.Lights[5].Strength = { 200.0f / 4.0f, 0.0f / 4.0f, 0.0f / 4.0f };				   // RED
 
+	mMainPassCB.Lights[6].Position = { 0.0f, 45.0f, 0.0f };
+	mMainPassCB.Lights[6].Direction = { 0.0f, -5.0f, 0.0f };
+	mMainPassCB.Lights[6].Strength = { 5.35f, 5.35f, 5.35f };
+	mMainPassCB.Lights[6].SpotPower = 0.95;
+
+	mMainPassCB.Lights[7].Position = { 34.0f, 10.0f, 34.0f };										   //Centre light
+	mMainPassCB.Lights[7].Strength = { 1.0, 0.3f, 0.0f };
+
+	mMainPassCB.Lights[8].Position = { 34.0f, 10.0f, 4.0f };										   //Centre light
+	mMainPassCB.Lights[8].Strength = { 1.0, 0.3f, 0.0f };
+
+	mMainPassCB.Lights[9].Position = { -34.0f, 10.0f, 34.0f };										   //Centre light
+	mMainPassCB.Lights[9].Strength = { 1.0, 0.3f, 0.0f };
+
+	mMainPassCB.Lights[10].Position = { -34.0f, 10.0f, 4.0f };										   //Centre light
+	mMainPassCB.Lights[10].Strength = { 1.0, 0.3f, 0.0f };
 
 	auto currPassCB = mCurrFrameResource->PassCB.get();
 	currPassCB->CopyData(0, mMainPassCB);
@@ -1700,7 +1720,7 @@ void FinalApp::BuildRenderItems()
 	UINT objCBIndex = 4;
     auto wavesRitem = std::make_unique<RenderItem>();
     wavesRitem->World = MathHelper::Identity4x4();
-	XMStoreFloat4x4(&wavesRitem->TexTransform, XMMatrixScaling(155.0f, 155.0f, 1.0f));
+	XMStoreFloat4x4(&wavesRitem->TexTransform, XMMatrixScaling(15.0f, 15.0f, 1.0f));
 	XMStoreFloat4x4(&wavesRitem->World, XMMatrixScaling(2.0f, 1.0f, 2.0f));
 	wavesRitem->ObjCBIndex = 0;
 	wavesRitem->Mat = mMaterials["water"].get();
@@ -2177,9 +2197,40 @@ void FinalApp::BuildRenderTowers()
 
 }
 
+void FinalApp::BuildRotationItems()
+{
+
+	UINT objCBIndex = 26;
+	auto Merlons2 = std::make_unique<RenderItem>();
+
+
+	float angle = 45;
+	static float t_base = 0.0f;
+	if ((mTimer.TotalTime() - t_base) >= 0.25f)
+	{
+		t_base += 1.25f;
+		angle += 0.25;
+	}
+
+	XMStoreFloat4x4(&Merlons2->World, XMMatrixScaling(10.0f, 10.0f, 10.0f) * XMMatrixRotationY(XMConvertToRadians(angle += 20 * mTimer.TotalTime())) * XMMatrixTranslation(0.0f, 34.0f, 0.0f));
+	//XMStoreFloat4x4(&Merlons2->World, XMMatrixScaling(10.0f, 10.0f, 10.0f) * XMMatrixTranslation(0.0f, 34.0f, 0.0f) * XMMatrixRotationY(XMConvertToRadians(45)));
+	//XMStoreFloat4x4(&Merlons2->World, XMMatrixRotationY(45));
+	XMStoreFloat4x4(&Merlons2->TexTransform, XMMatrixScaling(5.0f, 10.0f, 5.0f));
+	//XMMatrixRotationRollPitchYaw(0, 90, 0);
+	Merlons2->ObjCBIndex = objCBIndex++;
+	Merlons2->Mat = mMaterials["wall2"].get();
+	Merlons2->Geo = mGeometries["diamondGeo"].get();
+	Merlons2->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	Merlons2->IndexCount = Merlons2->Geo->DrawArgs["diamond"].IndexCount;
+	Merlons2->StartIndexLocation = Merlons2->Geo->DrawArgs["diamond"].StartIndexLocation;
+	Merlons2->BaseVertexLocation = Merlons2->Geo->DrawArgs["diamond"].BaseVertexLocation;
+	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(Merlons2.get());
+	mAllRitems.push_back(std::move(Merlons2));
+}
+
 void FinalApp::BuildRenderGate() 
 {
-	UINT objCBIndex = 26;
+	UINT objCBIndex = 27;
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////																									
@@ -2228,19 +2279,7 @@ void FinalApp::BuildRenderGate()
 	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(boxRitem2.get());
 	mAllRitems.push_back(std::move(boxRitem2));
 
-	auto Merlons2 = std::make_unique<RenderItem>();
 	
-	XMStoreFloat4x4(&Merlons2->World, XMMatrixScaling(10.0f, 10.0f, 10.0f) * XMMatrixTranslation(0.0f, 34.0f, 0.0f) * XMMatrixRotationY(150.0f));
-	XMStoreFloat4x4(&Merlons2->TexTransform, XMMatrixScaling(2.0f, 2.0f, 2.0f));
-	Merlons2->ObjCBIndex = objCBIndex++;
-	Merlons2->Mat = mMaterials["wall2"].get();
-	Merlons2->Geo = mGeometries["diamondGeo"].get();
-	Merlons2->PrimitiveType = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	Merlons2->IndexCount = Merlons2->Geo->DrawArgs["diamond"].IndexCount;
-	Merlons2->StartIndexLocation = Merlons2->Geo->DrawArgs["diamond"].StartIndexLocation;
-	Merlons2->BaseVertexLocation = Merlons2->Geo->DrawArgs["diamond"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(Merlons2.get());
-	mAllRitems.push_back(std::move(Merlons2));
 
 
 	// 
