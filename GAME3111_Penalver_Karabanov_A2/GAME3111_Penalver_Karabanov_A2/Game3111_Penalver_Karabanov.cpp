@@ -1804,7 +1804,14 @@ void FinalApp::BuildRenderItems()
     gridRitem->StartIndexLocation = gridRitem->Geo->DrawArgs["cylinder"].StartIndexLocation;
     gridRitem->BaseVertexLocation = gridRitem->Geo->DrawArgs["cylinder"].BaseVertexLocation;
 
+	BoundingBox bounds;
+	XMStoreFloat3(&bounds.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(0.0f, 0.0f, 0.0f).r[3]), XMVectorGetY(XMMatrixTranslation(0.0f, 0.0f, 0.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(0.0f, 0.0f, 0.0f).r[3]), 1.0f));
+	XMStoreFloat3(&bounds.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(285.0f, 1.2f, 285.0f).r[0]), XMVectorGetY(XMMatrixScaling(285.0f, 1.2f, 85.0f).r[1]), XMVectorGetZ(XMMatrixScaling(285.0f, 1.2f, 285.0f).r[2]), 1.0f));
+
+	gridRitem->Bounds = bounds;//
 	mRitemLayer[(int)RenderLayer::Opaque].push_back(gridRitem.get());
+
+
 
 	auto boxRitem = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&boxRitem->World, XMMatrixTranslation(0.0f, 1.7f, -0.0f));
@@ -1818,8 +1825,13 @@ void FinalApp::BuildRenderItems()
 	boxRitem->StartIndexLocation = boxRitem->Geo->DrawArgs["cylinder"].StartIndexLocation;
 	boxRitem->BaseVertexLocation = boxRitem->Geo->DrawArgs["cylinder"].BaseVertexLocation;
 
+	//BoundingBox bounds;
+	//XMStoreFloat3(&bounds.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(0.0f, 1.7f, -0.0f).r[3]), XMVectorGetY(XMMatrixTranslation(0.0f, 1.7f, -0.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(0.0f, 1.7f, -0.0f).r[3]), 1.0f));
+	//XMStoreFloat3(&bounds.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(25.0f, 25.0f, 25.0f).r[0]), XMVectorGetY(XMMatrixScaling(25.0f, 25.0f, 25.0f).r[1]), XMVectorGetZ(XMMatrixScaling(25.0f, 25.0f, 25.0f).r[2]), 1.0f));
 
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(boxRitem.get());
+	//boxRitem->Bounds = bounds;//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(boxRitem.get());
 
 	auto treeSpritesRitem = std::make_unique<RenderItem>();
 	treeSpritesRitem->World = MathHelper::Identity4x4();
@@ -1832,12 +1844,14 @@ void FinalApp::BuildRenderItems()
 	treeSpritesRitem->StartIndexLocation = treeSpritesRitem->Geo->DrawArgs["points"].StartIndexLocation;
 	treeSpritesRitem->BaseVertexLocation = treeSpritesRitem->Geo->DrawArgs["points"].BaseVertexLocation;
 
+
+
 	mRitemLayer[(int)RenderLayer::AlphaTestedTreeSprites].push_back(treeSpritesRitem.get());
 
 
 	auto m_Wall_R1 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&m_Wall_R1->TexTransform, XMMatrixScaling(9.0f,5.0f,1.0f));
-	XMStoreFloat4x4(&m_Wall_R1->World, XMMatrixScaling(2.0f, 4.0f, 2.0f) * XMMatrixTranslation(25.0f, 7.5f, 0.0f));
+	XMStoreFloat4x4(&m_Wall_R1->World, XMMatrixScaling(2.0f, 4.0f, 2.0f) * XMMatrixTranslation(25.0f, 37.5f, 0.0f));
 
 	m_Wall_R1->ObjCBIndex = objCBIndex++;
 	m_Wall_R1->Mat = mMaterials["wall"].get();
@@ -1846,7 +1860,14 @@ void FinalApp::BuildRenderItems()
 	m_Wall_R1->IndexCount = m_Wall_R1->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_R1->StartIndexLocation = m_Wall_R1->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_R1->BaseVertexLocation = m_Wall_R1->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_R1.get());
+
+	BoundingBox bounds2;
+	XMStoreFloat3(&bounds2.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(25.0f, 37.5f, 0.0f).r[3]), XMVectorGetY(XMMatrixTranslation(25.0f, 37.5f, 0.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(25.0f, 37.5f, 0.0f).r[3]), 1.0f));
+	XMStoreFloat3(&bounds2.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(2.0f, 16.0f, 50.0f).r[0]), XMVectorGetY(XMMatrixScaling(2.0f, 16.0f, 50.0f).r[1]), XMVectorGetZ(XMMatrixScaling(2.0f, 16.0f, 50.0f).r[2]), 1.0f));
+
+	m_Wall_R1->Bounds = bounds2;//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_R1.get());
 
 
 
@@ -2304,13 +2325,15 @@ void FinalApp::BuildRenderGate()
 	mainGate->IndexCount = mainGate->Geo->DrawArgs["Gate"].IndexCount;
 	mainGate->StartIndexLocation = mainGate->Geo->DrawArgs["Gate"].StartIndexLocation;									   //
 	mainGate->BaseVertexLocation = mainGate->Geo->DrawArgs["Gate"].BaseVertexLocation;									   //
-	mRitemLayer[(int)RenderLayer::Opaque].push_back(mainGate.get());												   //
-	mAllRitems.push_back(std::move(mainGate));
+
 	BoundingBox bounds;
 	XMStoreFloat3(&bounds.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(0.0f, 8.0f, -25.0f).r[3]), XMVectorGetY(XMMatrixTranslation(0.0f, 8.0f, -25.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(0.0f, 8.0f, -25.0f).r[3]), 1.0f));
 	XMStoreFloat3(&bounds.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(14.0f, 14.8f, 3.0f).r[0]), XMVectorGetY(XMMatrixScaling(14.0f, 14.8f, 3.0f).r[1]), XMVectorGetZ(XMMatrixScaling(14.0f, 14.8f, 3.0f).r[2]), 1.0f));
 
 	mainGate->Bounds = bounds;//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(mainGate.get());												   //
+	mAllRitems.push_back(std::move(mainGate));
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 	//
@@ -2341,14 +2364,14 @@ void FinalApp::BuildRenderGate()
 	boxRitem2->IndexCount = boxRitem2->Geo->DrawArgs["x"].IndexCount;
 	boxRitem2->StartIndexLocation = boxRitem2->Geo->DrawArgs["x"].StartIndexLocation;
 	boxRitem2->BaseVertexLocation = boxRitem2->Geo->DrawArgs["x"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::Opaque].push_back(boxRitem2.get());
-	mAllRitems.push_back(std::move(boxRitem2));
+
 	XMStoreFloat3(&bounds.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(0.0f, 11.5f, 0.0f).r[3]), XMVectorGetY(XMMatrixTranslation(0.0f, 11.5f, 0.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(0.0f, 11.5f, 0.0f).r[3]), 1.0f));
 	XMStoreFloat3(&bounds.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(0.650f, 1.2f, 0.650f).r[0]), XMVectorGetY(XMMatrixScaling(0.650f, 1.2f, 0.650f).r[1]), XMVectorGetZ(XMMatrixScaling(0.650f, 1.2f, 0.650f).r[2]), 1.0f));
 
 	boxRitem2->Bounds = bounds;//
 
-	
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(boxRitem2.get());
+	mAllRitems.push_back(std::move(boxRitem2));
 
 
 	// 
