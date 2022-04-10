@@ -45,6 +45,9 @@ struct RenderItem
 	Material* Mat = nullptr;
 	MeshGeometry* Geo = nullptr;
 
+
+	BoundingBox +;
+
     // Primitive topology.
     D3D12_PRIMITIVE_TOPOLOGY PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
@@ -163,7 +166,8 @@ private:
     float mTheta = 1.5f*XM_PI;
     float mPhi = XM_PIDIV2 - 0.1f;
     float mRadius = 50.0f;
-
+	float c_dist = 0.0f;
+	const float kHitDist = 7.0f;
     POINT mLastMousePos;
 };
 
@@ -387,26 +391,41 @@ void FinalApp::OnMouseMove(WPARAM btnState, int x, int y)
  
 void FinalApp::OnKeyboardInput(const GameTimer& gt)
 {
+	bool move_w = true;
+	bool move_s = true;
+	bool move_a = true;
+	bool move_d = true;
 
+	for (int i = 0; i < mRitemLayer[(int)RenderLayer::Opaque].size(); i++)
+	{
+		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(), mCamera.GetLook(), c_dist)) && c_dist < kHitDist)
+			move_w = false;
+
+
+		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(), -1.0f * mCamera.GetLook(), c_dist)) && c_dist < kHitDist)
+			move_s = false;
+
+		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(), -1.0f * mCamera.GetRight(), c_dist)) && c_dist < kHitDist)
+			move_a = false;
+
+		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(), mCamera.GetRight(), c_dist)) && c_dist < kHitDist) {
+			move_d = false;
+
+		}
+	}
 	const float dt = gt.DeltaTime();
 
-	if (GetAsyncKeyState('W') & 0x8000)
-		mCamera.Walk(10.0f * dt);
+	if ((GetAsyncKeyState('W') & 0x8000) && move_w)
+		mCamera.Walk(25.0f * dt);
 
-	if (GetAsyncKeyState('S') & 0x8000)
-		mCamera.Walk(-10.0f * dt);
+	if ((GetAsyncKeyState('S') & 0x8000) && move_s)
+		mCamera.Walk(-25.0f * dt);
 
-	if (GetAsyncKeyState('A') & 0x8000)
-		mCamera.Strafe(-10.0f * dt);
+	if ((GetAsyncKeyState('A') & 0x8000) && move_a)
+		mCamera.Strafe(-25.0f * dt);
 
-	if (GetAsyncKeyState('D') & 0x8000)
-		mCamera.Strafe(10.0f * dt);
-
-	if (GetAsyncKeyState('Q') & 0x8000)
-		mCamera.Pedestal(-10.0f * dt);
-
-	if (GetAsyncKeyState('E') & 0x8000)
-		mCamera.Pedestal(10.0f * dt);
+	if ((GetAsyncKeyState('D') & 0x8000) && move_d)
+		mCamera.Strafe(25.0f * dt);
 
 	mCamera.UpdateViewMatrix();
 
@@ -1759,6 +1778,7 @@ void FinalApp::BuildRenderItems()
 	boxRitem->StartIndexLocation = boxRitem->Geo->DrawArgs["cylinder"].StartIndexLocation;
 	boxRitem->BaseVertexLocation = boxRitem->Geo->DrawArgs["cylinder"].BaseVertexLocation;
 
+
 	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(boxRitem.get());
 
 	auto treeSpritesRitem = std::make_unique<RenderItem>();
@@ -2244,8 +2264,13 @@ void FinalApp::BuildRenderGate()
 	mainGate->IndexCount = mainGate->Geo->DrawArgs["Gate"].IndexCount;
 	mainGate->StartIndexLocation = mainGate->Geo->DrawArgs["Gate"].StartIndexLocation;									   //
 	mainGate->BaseVertexLocation = mainGate->Geo->DrawArgs["Gate"].BaseVertexLocation;									   //
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(mainGate.get());												   //
-	mAllRitems.push_back(std::move(mainGate));																			   //
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(mainGate.get());												   //
+	mAllRitems.push_back(std::move(mainGate));
+	BoundingBox bounds;
+	XMStoreFloat3(&bounds.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(0.0f, 8.0f, -25.0f).r[3]), XMVectorGetY(XMMatrixTranslation(0.0f, 8.0f, -25.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(0.0f, 8.0f, -25.0f).r[3]), 1.0f));
+	XMStoreFloat3(&bounds.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(14.0f, 14.8f, 3.0f).r[0]), XMVectorGetY(XMMatrixScaling(14.0f, 14.8f, 3.0f).r[1]), XMVectorGetZ(XMMatrixScaling(14.0f, 14.8f, 3.0f).r[2]), 1.0f));
+
+	mainGate->Bounds = bounds;//
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 	//
@@ -2276,8 +2301,12 @@ void FinalApp::BuildRenderGate()
 	boxRitem2->IndexCount = boxRitem2->Geo->DrawArgs["x"].IndexCount;
 	boxRitem2->StartIndexLocation = boxRitem2->Geo->DrawArgs["x"].StartIndexLocation;
 	boxRitem2->BaseVertexLocation = boxRitem2->Geo->DrawArgs["x"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(boxRitem2.get());
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(boxRitem2.get());
 	mAllRitems.push_back(std::move(boxRitem2));
+	XMStoreFloat3(&bounds.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(0.0f, 11.5f, 0.0f).r[3]), XMVectorGetY(XMMatrixTranslation(0.0f, 11.5f, 0.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(0.0f, 11.5f, 0.0f).r[3]), 1.0f));
+	XMStoreFloat3(&bounds.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(0.650f, 1.2f, 0.650f).r[0]), XMVectorGetY(XMMatrixScaling(0.650f, 1.2f, 0.650f).r[1]), XMVectorGetZ(XMMatrixScaling(0.650f, 1.2f, 0.650f).r[2]), 1.0f));
+
+	boxRitem2->Bounds = bounds;//
 
 	
 
