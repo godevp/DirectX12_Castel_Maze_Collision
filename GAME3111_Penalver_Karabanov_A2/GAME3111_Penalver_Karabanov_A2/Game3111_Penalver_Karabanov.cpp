@@ -1,5 +1,5 @@
 //***************************************************************************************
-// TreeBillboardsApp.cpp 
+// FinalAssingment_PenalverKarabanov
 //***************************************************************************************
 
 #include "../../Common/d3dApp.h"
@@ -1047,7 +1047,7 @@ void FinalApp::BuildTreeSpritesGeometry()
 		XMFLOAT2 Size;
 	};
 
-	static const int treeCount = 6;
+	static const int treeCount = 14;
 	std::array<TreeSpriteVertex, 16> vertices;
 	float x, z;
 	for(UINT i = 0; i < treeCount; ++i)
@@ -1072,13 +1072,53 @@ void FinalApp::BuildTreeSpritesGeometry()
 			break;
 		case 4:
 			x = -140;
-			z = 0.0f;
-			break;
-		case 5:
-			x = 140;
-			z = 0.0f;
+			z = 30.0f;
 			break;
 
+		case 5:
+			x = 140;
+			z = 30.0f;
+			break;
+
+		case 6:
+			x = -140.0f;
+			z = -60.0f;
+			break;
+
+		case 7:
+			x =	140.0f;
+			z = -60.0f;
+			break;
+
+		case 8:
+			x = 20.0f;
+			z = 110.0f;
+			break;
+
+		case 9:
+			x = -20.0f;
+			z = 120.0f;
+			break;
+
+		case 10:
+			x = 40.0f;
+			z = 120.0f;
+			break;
+
+		case 11:
+			x = -40.0f;
+			z = 110.0f;
+			break;
+
+		case 12:
+			x = 60.0f;
+			z = 100.0f;
+			break;
+
+		case 13:
+			x = -60.0f;
+			z = 120.0f;
+			break;
 		default:
 			break;
 		}
@@ -1091,9 +1131,9 @@ void FinalApp::BuildTreeSpritesGeometry()
 		vertices[i].Size = XMFLOAT2(20.0f, 20.0f);
 	}
 
-	std::array<std::uint16_t, 6> indices =
+	std::array<std::uint16_t, 14> indices =
 	{
-		0, 1, 2, 3, 4, 5
+		0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 	};
 
 	const UINT vbByteSize = (UINT)vertices.size() * sizeof(TreeSpriteVertex);
@@ -1740,7 +1780,7 @@ void FinalApp::BuildRenderItems()
     auto wavesRitem = std::make_unique<RenderItem>();
     wavesRitem->World = MathHelper::Identity4x4();
 	XMStoreFloat4x4(&wavesRitem->TexTransform, XMMatrixScaling(15.0f, 15.0f, 1.0f));
-	XMStoreFloat4x4(&wavesRitem->World, XMMatrixScaling(2.0f, 1.0f, 2.0f));
+	XMStoreFloat4x4(&wavesRitem->World, XMMatrixScaling(2.0f, 1.0f, 2.0f) * XMMatrixTranslation(0.0f, -1.0f ,0.0f));
 	wavesRitem->ObjCBIndex = 0;
 	wavesRitem->Mat = mMaterials["water"].get();
 	wavesRitem->Geo = mGeometries["waterGeo"].get();
