@@ -1073,8 +1073,8 @@ void FinalApp::BuildTreeSpritesGeometry()
 		XMFLOAT2 Size;
 	};
 
-	static const int treeCount = 14;
-	std::array<TreeSpriteVertex, 16> vertices;
+	static const int treeCount = 32;
+	std::array<TreeSpriteVertex, 38> vertices;
 	float x, z;
 	for(UINT i = 0; i < treeCount; ++i)
 	{
@@ -1145,8 +1145,138 @@ void FinalApp::BuildTreeSpritesGeometry()
 			x = -60.0f;
 			z = 120.0f;
 			break;
+	
+		case 14:
+			x = 40.0f;
+			z = 90.0f;
+			break;
+
+		case 15:
+			x = 20.0f;
+			z = 80.0f;
+			break;
+
+		case 16:
+			x = 50.0f;
+			z = 80.0f;
+			break;
+
+		case 17:
+			x = -60.0f;
+			z = 70.0f;
+			break;
+
+		case 18:
+			x = -40.0f;
+			z = 70.0f;
+			break;
+
+
+		case 19:
+			x = -10.0f;
+			z = 85.0f;
+			break;
+
+		case 20:
+			x = -80.0f;
+			z = 35.0f;
+			break;
+
+		case 21:
+			x = -85.0f;
+			z = 5.0f;
+			break;
+
+		case 22:
+			x = -70.0f;
+			z = 40.0f;
+			break;
+
+
+		case 23:
+			x = -95.0f;
+			z = 15.0f;
+			break;
+
+		case 24:
+			x = -75.0f;
+			z = -10.0f;
+			break;
+
+		case 25:
+			x = -80.0f;
+			z = -36.0f;
+			break;
+
+
+
+		case 26:
+			x = 80.0f;
+			z = 35.0f;
+			break;
+
+		case 27:
+			x = 105.0f;
+			z = 5.0f;
+			break;
+
+		case 28:
+			x = 70.0f;
+			z = 40.0f;
+			break;
+
+
+		case 29:
+			x = 95.0f;
+			z = 15.0f;
+			break;
+
+		case 30:
+			x = 75.0f;
+			z = -10.0f;
+			break;
+
+		case 31:
+			x = 120.0f;
+			z = -36.0f;
+			break;
+
+
+		case 32:
+			x = 110.0f;
+			z = 35.0f;
+			break;
+
+		case 33:
+			x = 135.0f;
+			z = 15.0f;
+			break;
+
+		case 34:
+			x = 150.0f;
+			z = 40.0f;
+			break;
+
+
+		case 35:
+			x = 125.0f;
+			z = 15.0f;
+			break;
+
+		case 36:
+			x = 105.0f;
+			z = -10.0f;
+			break;
+
+		case 37:
+			x = 100.0f;
+			z = -56.0f;
+			break;
+
+
 		default:
 			break;
+
 		}
 		float y = 2.5f;
 
@@ -1157,9 +1287,9 @@ void FinalApp::BuildTreeSpritesGeometry()
 		vertices[i].Size = XMFLOAT2(20.0f, 20.0f);
 	}
 
-	std::array<std::uint16_t, 14> indices =
+	std::array<std::uint16_t, 38> indices =
 	{
-		0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+		0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14 , 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33 ,34 ,35 ,36 ,37
 	};
 
 	const UINT vbByteSize = (UINT)vertices.size() * sizeof(TreeSpriteVertex);
@@ -1799,9 +1929,9 @@ void FinalApp::BuildMaterials()
 	wall2->Name = "wall2";
 	wall2->MatCBIndex = 4;
 	wall2->DiffuseSrvHeapIndex = 4;
-	wall2->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	wall2->FresnelR0 = XMFLOAT3(0.02f, 0.02f, 0.02f);
-	wall2->Roughness = 0.125f;
+	wall2->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 0.60f);
+	wall2->FresnelR0 = XMFLOAT3(0.602f, 0.602f, 0.602f);
+	wall2->Roughness = 0.405f;
 
 	auto wall3 = std::make_unique<Material>();
 	wall3->Name = "wall3";
@@ -2410,7 +2540,7 @@ void FinalApp::BuildRotationItems()
 	Merlons2->IndexCount = Merlons2->Geo->DrawArgs["diamond"].IndexCount;
 	Merlons2->StartIndexLocation = Merlons2->Geo->DrawArgs["diamond"].StartIndexLocation;
 	Merlons2->BaseVertexLocation = Merlons2->Geo->DrawArgs["diamond"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(Merlons2.get());
+	mRitemLayer[(int)RenderLayer::Transparent].push_back(Merlons2.get());
 	mAllRitems.push_back(std::move(Merlons2));
 }
 
