@@ -2904,11 +2904,12 @@ void FinalApp::BuilRenderMaze()
 	mazeWallLeft3->BaseVertexLocation = mazeWallLeft3->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
 
 	BoundingBox boundsMaze11;
-<<<<<<< HEAD
+	
+	//HEAD
 	XMStoreFloat3(&boundsMaze11.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-21.5f, 5.0f, -156.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-21.5f, 5.0f, -156.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-21.5f, 5.0f, -156.5f).r[3]), 1.0f));
-=======
-	XMStoreFloat3(&boundsMaze11.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-31.5f, 5.0f, -156.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-31.5f, 5.0f, -156.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-31.5f, 5.0f, -156.5f).r[3]), 1.0f));
->>>>>>> cc4ff4b53148152aaeb32142df637f0d2ad5be5f
+//
+	
+
 	XMStoreFloat3(&boundsMaze11.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[0]), XMVectorGetY(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[1]), XMVectorGetZ(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[2]), 1.0f));
 
 	mazeWallLeft3->Bounds = boundsMaze11;//
@@ -2929,11 +2930,9 @@ void FinalApp::BuilRenderMaze()
 	mazeWallLeft4->BaseVertexLocation = mazeWallLeft4->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
 
 	BoundingBox boundsMaze12;
-<<<<<<< HEAD
+
 	XMStoreFloat3(&boundsMaze12.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-11.5f, 5.0f, -135.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-11.5f, 5.0f, -135.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-11.5f, 5.0f, -135.5f).r[3]), 1.0f));
-=======
-	XMStoreFloat3(&boundsMaze12.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-11.5f, 5.0f, -156.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-11.5f, 5.0f, -156.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-11.5f, 5.0f, -156.5f).r[3]), 1.0f));
->>>>>>> cc4ff4b53148152aaeb32142df637f0d2ad5be5f
+
 	XMStoreFloat3(&boundsMaze12.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[0]), XMVectorGetY(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[1]), XMVectorGetZ(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[2]), 1.0f));
 
 	mazeWallLeft4->Bounds = boundsMaze12;//
