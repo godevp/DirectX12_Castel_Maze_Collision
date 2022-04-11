@@ -1082,8 +1082,8 @@ void FinalApp::BuildTreeSpritesGeometry()
 		XMFLOAT2 Size;
 	};
 
-	static const int treeCount = 32;
-	std::array<TreeSpriteVertex, 38> vertices;
+	static const int treeCount = 51;
+	std::array<TreeSpriteVertex, 51> vertices;
 	float x, z;
 	for(UINT i = 0; i < treeCount; ++i)
 	{
@@ -1278,8 +1278,77 @@ void FinalApp::BuildTreeSpritesGeometry()
 			break;
 
 		case 37:
-			x = 100.0f;
-			z = -56.0f;
+			x = -100.0f;
+			z = -106.0f;
+			break;
+
+
+		case 38:
+			x = -75.0f;
+			z = -90.0f;
+			break;
+
+		case 39:
+			x = -120.0f;
+			z = -66.0f;
+			break;
+
+
+		case 40:
+			x = -110.0f;
+			z = -35.0f;
+			break;
+
+		case 41:
+			x = 135.0f;
+			z = -75.0f;
+			break;
+
+		case 42:
+			x = 150.0f;
+			z = -80.0f;
+			break;
+
+
+		case 43:
+			x = -125.0f;
+			z = -85.0f;
+			break;
+
+		case 44:
+			x = -105.0f;
+			z = -80.0f;
+			break;
+
+		case 45:
+			x = -120.0f;
+			z = -66.0f;
+			break;
+
+		case 46:
+			x = 85.0f;
+			z = -125.0f;
+			break;
+
+		case 47:
+			x = 90.0f;
+			z = -90.0f;
+			break;
+
+
+		case 48:
+			x = -125.0f;
+			z = -85.0f;
+			break;
+
+		case 49:
+			x = -105.0f;
+			z = -80.0f;
+			break;
+
+		case 50:
+			x = 120.0f;
+			z = -126.0f;
 			break;
 
 
@@ -1296,9 +1365,9 @@ void FinalApp::BuildTreeSpritesGeometry()
 		vertices[i].Size = XMFLOAT2(20.0f, 20.0f);
 	}
 
-	std::array<std::uint16_t, 38> indices =
+	std::array<std::uint16_t, 51> indices =
 	{
-		0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14 , 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33 ,34 ,35 ,36 ,37
+		0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14 , 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33 ,34 ,35 ,36 ,37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,49, 50
 	};
 
 	const UINT vbByteSize = (UINT)vertices.size() * sizeof(TreeSpriteVertex);
