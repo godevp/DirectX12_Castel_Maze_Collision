@@ -711,6 +711,13 @@ void FinalApp::LoadTextures()
 		mCommandList.Get(), gate->Filename.c_str(),
 		gate->Resource, gate->UploadHeap));
 
+	auto bush = std::make_unique<Texture>();
+	bush->Name = "bush";
+	bush->Filename = L"../../Textures/bush.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), bush->Filename.c_str(),
+		bush->Resource, bush->UploadHeap));
+
 	mTextures[grassTex->Name] = std::move(grassTex);
 	mTextures[waterTex->Name] = std::move(waterTex);
 	mTextures[fenceTex->Name] = std::move(fenceTex);
@@ -721,6 +728,7 @@ void FinalApp::LoadTextures()
 	mTextures[WallTex3->Name] = std::move(WallTex3);
 	mTextures[sample1->Name] = std::move(sample1);
 	mTextures[gate->Name] = std::move(gate);
+	mTextures[bush->Name] = std::move(bush);
 }
 
 void FinalApp::BuildRootSignature()
@@ -769,7 +777,7 @@ void FinalApp::BuildDescriptorHeaps()
 	// Create the SRV heap.
 	//
 	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-	srvHeapDesc.NumDescriptors = 9;
+	srvHeapDesc.NumDescriptors = 10;
 	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	ThrowIfFailed(md3dDevice->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&mSrvDescriptorHeap)));
@@ -788,6 +796,8 @@ void FinalApp::BuildDescriptorHeaps()
 	auto WallTex3 = mTextures["WallTex3"]->Resource;
 	auto sample1 = mTextures["sample1"]->Resource; 
 	auto gate = mTextures["gate"]->Resource;
+
+	auto bush = mTextures["bush"]->Resource;
 	auto treeArrayTex = mTextures["treeArrayTex"]->Resource;
 	
 	
@@ -834,6 +844,11 @@ md3dDevice->CreateShaderResourceView(sample1.Get(), &srvDesc, hDescriptor);
 hDescriptor.Offset(1, mCbvSrvDescriptorSize);
 srvDesc.Format = gate->GetDesc().Format;
 md3dDevice->CreateShaderResourceView(gate.Get(), &srvDesc, hDescriptor);
+
+// next descriptor
+hDescriptor.Offset(1, mCbvSrvDescriptorSize);
+srvDesc.Format = bush->GetDesc().Format;
+md3dDevice->CreateShaderResourceView(bush.Get(), &srvDesc, hDescriptor);
 
 
 	// next descriptor
@@ -1812,10 +1827,19 @@ void FinalApp::BuildMaterials()
 	gate->FresnelR0 = XMFLOAT3(0.51f, 0.902f, 0.902f);
 	gate->Roughness = 0.02f;
 
+
+	auto bush = std::make_unique<Material>();
+	bush->Name = "bush";
+	bush->MatCBIndex = 8;
+	bush->DiffuseSrvHeapIndex = 8;
+	bush->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 0.6f);
+	bush->FresnelR0 = XMFLOAT3(0.51f, 0.902f, 0.902f);
+	bush->Roughness = 0.02f;
+
 	auto treeSprites = std::make_unique<Material>();
 	treeSprites->Name = "treeSprites";
-	treeSprites->MatCBIndex = 8;
-	treeSprites->DiffuseSrvHeapIndex = 8;
+	treeSprites->MatCBIndex = 9;
+	treeSprites->DiffuseSrvHeapIndex = 9;
 	treeSprites->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	treeSprites->FresnelR0 = XMFLOAT3(0.01f, 0.01f, 0.01f);
 	treeSprites->Roughness = 0.125f;
@@ -1833,6 +1857,7 @@ void FinalApp::BuildMaterials()
 	mMaterials["wall3"] = std::move(wall3);
 	mMaterials["sample1"] = std::move(sample1);
 	mMaterials["gate"] = std::move(gate);
+	mMaterials["bush"] = std::move(bush);
 }
 
 void FinalApp::BuildRenderItems()
@@ -2647,9 +2672,9 @@ void FinalApp::BuilRenderMaze()
 	auto boxRitem4 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&boxRitem4->World, XMMatrixScaling(3.0f, 15.0f, 20.0f) * XMMatrixTranslation(-7.0f, 5.0f, -78.0f));
 
-	XMStoreFloat4x4(&boxRitem4->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
+	XMStoreFloat4x4(&boxRitem4->TexTransform, XMMatrixScaling(2.0f, 4.0f, 0.00f));
 	boxRitem4->ObjCBIndex = objCBIndex++;
-	boxRitem4->Mat = mMaterials["water"].get();
+	boxRitem4->Mat = mMaterials["bush"].get();
 	boxRitem4->Geo = mGeometries["mazeWallGeo"].get();
 	boxRitem4->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	boxRitem4->IndexCount = boxRitem4->Geo->DrawArgs["mazeWall"].IndexCount;
