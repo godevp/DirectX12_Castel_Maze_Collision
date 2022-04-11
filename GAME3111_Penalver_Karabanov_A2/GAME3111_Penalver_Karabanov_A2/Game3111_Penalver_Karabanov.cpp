@@ -197,7 +197,7 @@ bool FinalApp::Initialize()
     ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
     mCbvSrvDescriptorSize = md3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	mCamera.SetPosition(0.0f, 30.0f, -255.0f);
+	mCamera.SetPosition(0.0f, 20.0f, -400.0f);
     mWaves = std::make_unique<Waves>(200, 200, 2.50f, 0.3f, 0.5130f, 0.112f);
 	
 	LoadTextures();
