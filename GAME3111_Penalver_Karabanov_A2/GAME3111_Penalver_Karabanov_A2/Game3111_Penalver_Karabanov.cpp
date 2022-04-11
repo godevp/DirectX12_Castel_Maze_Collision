@@ -2672,7 +2672,7 @@ void FinalApp::BuildRotationItems()
 	mAllRitems.push_back(std::move(Merlons2));
 
 	auto mazeWallLeft10 = std::make_unique<RenderItem>();
-	XMStoreFloat4x4(&mazeWallLeft10->World, XMMatrixScaling(3.0f, 15.0f, 22.0f)  * XMMatrixRotationY(XMConvertToRadians(angle += 20 * mTimer.TotalTime())) * XMMatrixTranslation(-26.5f, 5.0f, -98.5f));
+	XMStoreFloat4x4(&mazeWallLeft10->World, XMMatrixScaling(3.0f, 15.0f, 22.0f)  * XMMatrixTranslation(-26.5f, 5.0f, -98.5f));
 	XMStoreFloat4x4(&mazeWallLeft10->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
 	mazeWallLeft10->ObjCBIndex = objCBIndex++;
 	mazeWallLeft10->Mat = mMaterials["bush"].get();
