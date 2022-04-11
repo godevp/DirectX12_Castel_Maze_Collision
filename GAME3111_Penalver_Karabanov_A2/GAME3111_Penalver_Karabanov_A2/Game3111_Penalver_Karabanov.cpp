@@ -2664,7 +2664,13 @@ void FinalApp::BuildRenderGate()
 	m_Wall_O1->IndexCount = m_Wall_O1->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_O1->StartIndexLocation = m_Wall_O1->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_O1->BaseVertexLocation = m_Wall_O1->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_O1.get());
+	BoundingBox bound[20];
+	XMStoreFloat3(&bound[0].Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(55.0f, 7.5f, -6.250f).r[3]), XMVectorGetY(XMMatrixTranslation(55.0f, 7.5f, -6.250f).r[3]), XMVectorGetZ(XMMatrixTranslation(55.0f, 7.5f, -6.250f).r[3]), 1.0f));
+	XMStoreFloat3(&bound[0].Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(1.0f, 16.0f * 1.5f, 125.0f).r[0]), XMVectorGetY(XMMatrixScaling(1.0f, 16.0f * 1.5f, 125.0f).r[1]), XMVectorGetZ(XMMatrixScaling(1.0f, 16.0f * 1.5f, 125.0f).r[2]), 1.0f));
+
+	m_Wall_O1->Bounds = bound[0];//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_O1.get());
 
 
 
@@ -2678,7 +2684,12 @@ void FinalApp::BuildRenderGate()
 	m_Wall_2->IndexCount = m_Wall_2->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_2->StartIndexLocation = m_Wall_2->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_2->BaseVertexLocation = m_Wall_2->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_2.get());
+	XMStoreFloat3(&bound[1].Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-55.0f, 7.5f, -6.250f).r[3]), XMVectorGetY(XMMatrixTranslation(-55.0f, 7.5f, -6.250f).r[3]), XMVectorGetZ(XMMatrixTranslation(-55.0f, 7.5f, -6.250f).r[3]), 1.0f));
+	XMStoreFloat3(&bound[1].Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(1.0f, 16.0f * 1.5f, 125.0f).r[0]), XMVectorGetY(XMMatrixScaling(1.0f, 16.0f * 1.5f, 125.0f).r[1]), XMVectorGetZ(XMMatrixScaling(1.0f, 16.0f * 1.5f, 125.0f).r[2]), 1.0f));
+
+	m_Wall_2->Bounds = bound[1];//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_2.get());
 
 	
 
@@ -2693,7 +2704,12 @@ void FinalApp::BuildRenderGate()
 	m_Wall_4->IndexCount = m_Wall_4->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_4->StartIndexLocation = m_Wall_4->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_4->BaseVertexLocation = m_Wall_4->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_4.get());
+	XMStoreFloat3(&bound[2].Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(0.0f, 7.5f, 55.0f).r[3]), XMVectorGetY(XMMatrixTranslation(0.0f, 7.5f, 55.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(0.0f, 7.5f, 55.0f).r[3]), 1.0f));
+	XMStoreFloat3(&bound[2].Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(110.0f, 16.0f * 1.5f, 1.0f).r[0]), XMVectorGetY(XMMatrixScaling(110.0f, 16.0f * 1.5f, 1.0f).r[1]), XMVectorGetZ(XMMatrixScaling(110.0f, 16.0f * 1.5f, 1.0f).r[2]), 1.0f));
+
+	m_Wall_4->Bounds = bound[2];//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_4.get());
 
 
 
@@ -2709,7 +2725,12 @@ void FinalApp::BuildRenderGate()
 	m_Wall_1_MAZE->IndexCount = m_Wall_1_MAZE->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_1_MAZE->StartIndexLocation = m_Wall_1_MAZE->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_1_MAZE->BaseVertexLocation = m_Wall_1_MAZE->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_1_MAZE.get());
+	XMStoreFloat3(&bound[3].Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-40.0f, 7.5f, 5.0f).r[3]), XMVectorGetY(XMMatrixTranslation(-40.0f, 7.5f, 5.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(-40.0f, 7.5f, 5.0f).r[3]), 1.0f));
+	XMStoreFloat3(&bound[3].Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(2.0f, 16.0f * 1.5f, 100.0f).r[0]), XMVectorGetY(XMMatrixScaling(2.0f, 16.0f * 1.5f, 100.0f).r[1]), XMVectorGetZ(XMMatrixScaling(2.0f, 16.0f * 1.5f, 100.0f).r[2]), 1.0f));
+
+	m_Wall_1_MAZE->Bounds = bound[3];//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_1_MAZE.get());
 
 	auto m_Wall_2_MAZE = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&m_Wall_2_MAZE->TexTransform, XMMatrixScaling(9.0f, 5.0f, 1.0f));
@@ -2721,7 +2742,12 @@ void FinalApp::BuildRenderGate()
 	m_Wall_2_MAZE->IndexCount = m_Wall_2_MAZE->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_2_MAZE->StartIndexLocation = m_Wall_2_MAZE->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_2_MAZE->BaseVertexLocation = m_Wall_2_MAZE->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_2_MAZE.get());
+	XMStoreFloat3(&bound[4].Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(+40.0f, 7.5f, -5.0f).r[3]), XMVectorGetY(XMMatrixTranslation(+40.0f, 7.5f, -5.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(+40.0f, 7.5f, -5.0f).r[3]), 1.0f));
+	XMStoreFloat3(&bound[4].Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(2.0f, 16.0f * 1.5f, 87.5f).r[0]), XMVectorGetY(XMMatrixScaling(2.0f, 16.0f * 1.5f, 87.5f).r[1]), XMVectorGetZ(XMMatrixScaling(2.0f, 16.0f * 1.5f, 87.5f).r[2]), 1.0f));
+
+	m_Wall_2_MAZE->Bounds = bound[4];//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_2_MAZE.get());
 
 	auto m_Wall_3_MAZE = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&m_Wall_3_MAZE->TexTransform, XMMatrixScaling(9.0f, 5.0f, 1.0f));
@@ -2733,7 +2759,12 @@ void FinalApp::BuildRenderGate()
 	m_Wall_3_MAZE->IndexCount = m_Wall_3_MAZE->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_3_MAZE->StartIndexLocation = m_Wall_3_MAZE->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_3_MAZE->BaseVertexLocation = m_Wall_3_MAZE->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_3_MAZE.get());
+	XMStoreFloat3(&bound[5].Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(8.5f, 7.5f, 40.0f).r[3]), XMVectorGetY(XMMatrixTranslation(8.5f, 7.5f, 40.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(8.5f, 7.5f, 40.0f).r[3]), 1.0f));
+	XMStoreFloat3(&bound[5].Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(65.0f, 16.0f * 1.5f, 1.f).r[0]), XMVectorGetY(XMMatrixScaling(65.0f, 16.0f * 1.5f, 1.f).r[1]), XMVectorGetZ(XMMatrixScaling(65.0f, 16.0f * 1.5f, 1.f).r[2]), 1.0f));
+
+	m_Wall_3_MAZE->Bounds = bound[5];//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_3_MAZE.get());
 
 	auto m_Wall_3 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&m_Wall_3->TexTransform, XMMatrixScaling(9.0f, 5.0f, 1.0f));
@@ -2745,7 +2776,12 @@ void FinalApp::BuildRenderGate()
 	m_Wall_3->IndexCount = m_Wall_3->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_3->StartIndexLocation = m_Wall_3->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_3->BaseVertexLocation = m_Wall_3->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_3.get());
+	XMStoreFloat3(&bound[6].Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-8.50f, 7.5f, -46.0f).r[3]), XMVectorGetY(XMMatrixTranslation(-8.50f, 7.5f, -46.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(-8.50f, 7.5f, -46.0f).r[3]), 1.0f));
+	XMStoreFloat3(&bound[6].Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(65.0f, 16.0f * 1.5f, 1.f).r[0]), XMVectorGetY(XMMatrixScaling(65.0f, 16.0f * 1.5f, 1.f).r[1]), XMVectorGetZ(XMMatrixScaling(65.0f, 16.0f * 1.5f, 1.f).r[2]), 1.0f));
+
+	m_Wall_3->Bounds = bound[6];//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_3.get());
 
 
 	auto m_Wall_4_MAZE = std::make_unique<RenderItem>();
@@ -2758,8 +2794,12 @@ void FinalApp::BuildRenderGate()
 	m_Wall_4_MAZE->IndexCount = m_Wall_4_MAZE->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_4_MAZE->StartIndexLocation = m_Wall_4_MAZE->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_4_MAZE->BaseVertexLocation = m_Wall_4_MAZE->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_4_MAZE.get());
+	XMStoreFloat3(&bound[7].Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(25.0f, 7.5f, -34.80f).r[3]), XMVectorGetY(XMMatrixTranslation(25.0f, 7.5f, -34.80f).r[3]), XMVectorGetZ(XMMatrixTranslation(25.0f, 7.5f, -34.80f).r[3]), 1.0f));
+	XMStoreFloat3(&bound[7].Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(1.0f, 16.0f * 1.5f, 25.f).r[0]), XMVectorGetY(XMMatrixScaling(1.0f, 16.0f * 1.5f, 25.f).r[1]), XMVectorGetZ(XMMatrixScaling(1.0f, 16.0f * 1.5f, 25.f).r[2]), 1.0f));
 
+	m_Wall_4_MAZE->Bounds = bound[7];//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_4_MAZE.get());
 
 	auto m_Wall_5_MAZE = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&m_Wall_5_MAZE->TexTransform, XMMatrixScaling(9.0f, 5.0f,6.0f));
@@ -2772,7 +2812,13 @@ void FinalApp::BuildRenderGate()
 	m_Wall_5_MAZE->IndexCount = m_Wall_5_MAZE->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_5_MAZE->StartIndexLocation = m_Wall_5_MAZE->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_5_MAZE->BaseVertexLocation = m_Wall_5_MAZE->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_5_MAZE.get());
+	XMStoreFloat3(&bound[8].Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-30.9f, 7.5f, -67.6f).r[3]), XMVectorGetY(XMMatrixTranslation(-30.9f, 7.5f, -67.6f).r[3]), XMVectorGetZ(XMMatrixTranslation(-30.9f, 7.5f, -67.6f).r[3]), 1.0f));
+	XMStoreFloat3(&bound[8].Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(50.0f, 16.0f * 1.5f, 1.f).r[0]), XMVectorGetY(XMMatrixScaling(50.0f, 16.0f * 1.5f, 1.f).r[1]), XMVectorGetZ(XMMatrixScaling(50.0f, 16.0f * 1.5f, 1.f).r[2]), 1.0f));
+
+	m_Wall_5_MAZE->Bounds = bound[8];//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_5_MAZE.get());
+
 
 
 	auto m_Wall_6_MAZE = std::make_unique<RenderItem>();
@@ -2785,7 +2831,12 @@ void FinalApp::BuildRenderGate()
 	m_Wall_6_MAZE->IndexCount = m_Wall_6_MAZE->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_6_MAZE->StartIndexLocation = m_Wall_6_MAZE->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_6_MAZE->BaseVertexLocation = m_Wall_6_MAZE->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_6_MAZE.get());
+	XMStoreFloat3(&bound[9].Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-25.0f, 7.5f, +34.0f).r[3]), XMVectorGetY(XMMatrixTranslation(-25.0f, 7.5f, +34.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(-25.0f, 7.5f, +34.0f).r[3]), 1.0f));
+	XMStoreFloat3(&bound[9].Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(1.0f, 16.0f * 1.5f, 15.f).r[0]), XMVectorGetY(XMMatrixScaling(1.0f, 16.0f * 1.5f, 15.f).r[1]), XMVectorGetZ(XMMatrixScaling(1.0f, 16.0f * 1.5f, 15.f).r[2]), 1.0f));
+
+	m_Wall_6_MAZE->Bounds = bound[9];//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_6_MAZE.get());
 
 	auto m_Wall_7_MAZE = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&m_Wall_7_MAZE->TexTransform, XMMatrixScaling(7.0f, 5.0f, 4.0f));
@@ -2797,7 +2848,12 @@ void FinalApp::BuildRenderGate()
 	m_Wall_7_MAZE->IndexCount = m_Wall_7_MAZE->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_7_MAZE->StartIndexLocation = m_Wall_7_MAZE->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_7_MAZE->BaseVertexLocation = m_Wall_7_MAZE->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_7_MAZE.get());
+	XMStoreFloat3(&bound[10].Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(+30.9f, 7.5f, -67.6f).r[3]), XMVectorGetY(XMMatrixTranslation(+30.9f, 7.5f, -67.6f).r[3]), XMVectorGetZ(XMMatrixTranslation(+30.9f, 7.5f, -67.6f).r[3]), 1.0f));
+	XMStoreFloat3(&bound[10].Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(50.0f, 16.0f * 1.5f, 1.f).r[0]), XMVectorGetY(XMMatrixScaling(50.0f, 16.0f * 1.5f, 1.f).r[1]), XMVectorGetZ(XMMatrixScaling(50.0f, 16.0f * 1.5f, 1.f).r[2]), 1.0f));
+
+	m_Wall_7_MAZE->Bounds = bound[10];//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_7_MAZE.get());
 
 	mAllRitems.push_back(std::move(m_Wall_2));
 	mAllRitems.push_back(std::move(m_Wall_3));
