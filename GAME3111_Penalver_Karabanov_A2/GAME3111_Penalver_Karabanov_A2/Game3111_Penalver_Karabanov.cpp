@@ -292,7 +292,6 @@ void FinalApp::Update(const GameTimer& gt)
 	UpdateMainPassCB(gt);
     UpdateWaves(gt);
 	BuildRotationItems();
-	
 
 }
 
@@ -712,18 +711,10 @@ void FinalApp::LoadTextures()
 		mCommandList.Get(), gate->Filename.c_str(),
 		gate->Resource, gate->UploadHeap));
 
-	auto bush = std::make_unique<Texture>();
-	bush->Name = "bush";
-	bush->Filename = L"../../Textures/bush.dds";
-	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
-		mCommandList.Get(), bush->Filename.c_str(),
-		bush->Resource, bush->UploadHeap));
-
 	mTextures[grassTex->Name] = std::move(grassTex);
 	mTextures[waterTex->Name] = std::move(waterTex);
 	mTextures[fenceTex->Name] = std::move(fenceTex);
 	mTextures[treeArrayTex->Name] = std::move(treeArrayTex);
-	mTextures[bush->Name] = std::move(bush);
 
 	mTextures[WallTex->Name] = std::move(WallTex);
 	mTextures[WallTex2->Name] = std::move(WallTex2);
@@ -797,7 +788,6 @@ void FinalApp::BuildDescriptorHeaps()
 	auto WallTex3 = mTextures["WallTex3"]->Resource;
 	auto sample1 = mTextures["sample1"]->Resource; 
 	auto gate = mTextures["gate"]->Resource;
-	auto bush = mTextures["bush"]->Resource;
 	auto treeArrayTex = mTextures["treeArrayTex"]->Resource;
 	
 	
@@ -1830,14 +1820,6 @@ void FinalApp::BuildMaterials()
 	treeSprites->FresnelR0 = XMFLOAT3(0.01f, 0.01f, 0.01f);
 	treeSprites->Roughness = 0.125f;
 
-	auto bush = std::make_unique<Material>();
-	treeSprites->Name = "bush";
-	treeSprites->MatCBIndex = 8;
-	treeSprites->DiffuseSrvHeapIndex = 8;
-	treeSprites->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	treeSprites->FresnelR0 = XMFLOAT3(0.01f, 0.01f, 0.01f);
-	treeSprites->Roughness = 0.125f;
-
 	
 
 
@@ -1851,7 +1833,6 @@ void FinalApp::BuildMaterials()
 	mMaterials["wall3"] = std::move(wall3);
 	mMaterials["sample1"] = std::move(sample1);
 	mMaterials["gate"] = std::move(gate);
-	mMaterials["bush"] = std::move(bush);
 }
 
 void FinalApp::BuildRenderItems()
@@ -2274,7 +2255,6 @@ void FinalApp::BuildRenderTowers()
 	RooftrightTowerUPInner->StartIndexLocation = RooftrightTowerUPInner->Geo->DrawArgs["TowerTop"].StartIndexLocation;
 
 	rightTowerUPInner->BaseVertexLocation = rightTowerUPInner->Geo->DrawArgs["Tower"].BaseVertexLocation;
-	RooftrightTowerUPInner->BaseVertexLocation = RooftrightTowerUPInner->Geo->DrawArgs["TowerTop"].BaseVertexLocation;
 	RooftrightTowerUPInner->BaseVertexLocation = RooftrightTowerUPInner->Geo->DrawArgs["TowerTop"].BaseVertexLocation;
 
 	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(rightTowerUPInner.get());
