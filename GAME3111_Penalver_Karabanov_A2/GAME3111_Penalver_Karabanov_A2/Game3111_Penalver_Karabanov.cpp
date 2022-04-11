@@ -441,12 +441,15 @@ void FinalApp::OnKeyboardInput(const GameTimer& gt)
 		mCamera.Strafe(25.0f * dt);
 
 
+<<<<<<< HEAD
 	if ((GetAsyncKeyState('Q') & 0x8000) && move_q)
 		mCamera.Pedestal(-45.0f * dt);
 
 	if ((GetAsyncKeyState('E') & 0x8000) && move_e )
 		mCamera.Pedestal(45.0f * dt);
 
+=======
+>>>>>>> 5f8a23898974444c4897c8801b04415d3299c643
 	mCamera.UpdateViewMatrix();
 
 
