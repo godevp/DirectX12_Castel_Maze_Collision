@@ -2697,7 +2697,7 @@ void FinalApp::BuilRenderMaze()
 
 	XMStoreFloat4x4(&boxRitem5->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
 	boxRitem5->ObjCBIndex = objCBIndex++;
-	boxRitem5->Mat = mMaterials["water"].get();
+	boxRitem5->Mat = mMaterials["bush"].get();
 	boxRitem5->Geo = mGeometries["mazeWallGeo"].get();
 	boxRitem5->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	boxRitem5->IndexCount = boxRitem5->Geo->DrawArgs["mazeWall"].IndexCount;
@@ -2721,7 +2721,7 @@ void FinalApp::BuilRenderMaze()
 	XMStoreFloat4x4(&mazeWallRight->World, XMMatrixScaling(40.0f, 15.0f, 3.0f) * XMMatrixTranslation(27.0f, 5.0f, -85.0f));
 	XMStoreFloat4x4(&mazeWallRight->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
 	mazeWallRight->ObjCBIndex = objCBIndex++;
-	mazeWallRight->Mat = mMaterials["water"].get();
+	mazeWallRight->Mat = mMaterials["bush"].get();
 	mazeWallRight->Geo = mGeometries["mazeWallGeo"].get();
 	mazeWallRight->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	mazeWallRight->IndexCount = mazeWallRight->Geo->DrawArgs["mazeWall"].IndexCount;
@@ -2743,7 +2743,7 @@ void FinalApp::BuilRenderMaze()
 	XMStoreFloat4x4(&mazeWallRight2->World, XMMatrixScaling(3.0f, 15.0f, 70.0f) * XMMatrixTranslation(48.5f, 5.0f, -118.5f));
 	XMStoreFloat4x4(&mazeWallRight2->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
 	mazeWallRight2->ObjCBIndex = objCBIndex++;
-	mazeWallRight2->Mat = mMaterials["water"].get();
+	mazeWallRight2->Mat = mMaterials["bush"].get();
 	mazeWallRight2->Geo = mGeometries["mazeWallGeo"].get();
 	mazeWallRight2->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	mazeWallRight2->IndexCount = mazeWallRight2->Geo->DrawArgs["mazeWall"].IndexCount;
@@ -2764,7 +2764,7 @@ void FinalApp::BuilRenderMaze()
 	XMStoreFloat4x4(&mazeWallRight3->World, XMMatrixScaling(3.0f, 15.0f, 49.0f) * XMMatrixTranslation( 35.0f, 5.0f, -124.0f));
 	XMStoreFloat4x4(&mazeWallRight3->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
 	mazeWallRight3->ObjCBIndex = objCBIndex++;
-	mazeWallRight3->Mat = mMaterials["water"].get();
+	mazeWallRight3->Mat = mMaterials["bush"].get();
 	mazeWallRight3->Geo = mGeometries["mazeWallGeo"].get();
 	mazeWallRight3->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	mazeWallRight3->IndexCount = mazeWallRight3->Geo->DrawArgs["mazeWall"].IndexCount;
@@ -2786,7 +2786,7 @@ void FinalApp::BuilRenderMaze()
 	XMStoreFloat4x4(&mazeWallRight4->World, XMMatrixScaling(3.0f, 15.0f, 49.0f)* XMMatrixTranslation(20.0f, 5.0f, -124.0f));
 	XMStoreFloat4x4(&mazeWallRight4->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
 	mazeWallRight4->ObjCBIndex = objCBIndex++;
-	mazeWallRight4->Mat = mMaterials["water"].get();
+	mazeWallRight4->Mat = mMaterials["bush"].get();
 	mazeWallRight4->Geo = mGeometries["mazeWallGeo"].get();
 	mazeWallRight4->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	mazeWallRight4->IndexCount = mazeWallRight4->Geo->DrawArgs["mazeWall"].IndexCount;
@@ -2808,7 +2808,7 @@ void FinalApp::BuilRenderMaze()
 	XMStoreFloat4x4(&mazeWallRight5->World, XMMatrixScaling(13.0f, 15.0f, 3.0f)* XMMatrixTranslation(27.0f, 5.0f, -147.0f));
 	XMStoreFloat4x4(&mazeWallRight5->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
 	mazeWallRight5->ObjCBIndex = objCBIndex++;
-	mazeWallRight5->Mat = mMaterials["water"].get();
+	mazeWallRight5->Mat = mMaterials["bush"].get();
 	mazeWallRight5->Geo = mGeometries["mazeWallGeo"].get();
 	mazeWallRight5->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	mazeWallRight5->IndexCount = mazeWallRight5->Geo->DrawArgs["mazeWall"].IndexCount;
@@ -2830,7 +2830,7 @@ void FinalApp::BuilRenderMaze()
 	XMStoreFloat4x4(&mazeWallRight6->World, XMMatrixScaling(33.0f, 15.0f, 3.0f)* XMMatrixTranslation(5.0f, 5.0f, -98.0f));
 	XMStoreFloat4x4(&mazeWallRight6->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
 	mazeWallRight6->ObjCBIndex = objCBIndex++;
-	mazeWallRight6->Mat = mMaterials["water"].get();
+	mazeWallRight6->Mat = mMaterials["bush"].get();
 	mazeWallRight6->Geo = mGeometries["mazeWallGeo"].get();
 	mazeWallRight6->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	mazeWallRight6->IndexCount = mazeWallRight6->Geo->DrawArgs["mazeWall"].IndexCount;
@@ -2853,7 +2853,7 @@ void FinalApp::BuilRenderMaze()
 	XMStoreFloat4x4(&mazeWallLeft->World, XMMatrixScaling(40.0f, 15.0f, 3.0f)* XMMatrixTranslation(-28.5f, 5.0f, -86.5f));
 	XMStoreFloat4x4(&mazeWallLeft->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
 	mazeWallLeft->ObjCBIndex = objCBIndex++;
-	mazeWallLeft->Mat = mMaterials["water"].get();
+	mazeWallLeft->Mat = mMaterials["bush"].get();
 	mazeWallLeft->Geo = mGeometries["mazeWallGeo"].get();
 	mazeWallLeft->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	mazeWallLeft->IndexCount = mazeWallLeft->Geo->DrawArgs["mazeWall"].IndexCount;
@@ -2874,7 +2874,7 @@ void FinalApp::BuilRenderMaze()
 	XMStoreFloat4x4(&mazeWallleft2->World, XMMatrixScaling(3.0f, 15.0f, 70.0f)* XMMatrixTranslation(-50.0f, 5.0f, -120.0f));
 	XMStoreFloat4x4(&mazeWallleft2->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
 	mazeWallleft2->ObjCBIndex = objCBIndex++;
-	mazeWallleft2->Mat = mMaterials["water"].get();
+	mazeWallleft2->Mat = mMaterials["bush"].get();
 	mazeWallleft2->Geo = mGeometries["mazeWallGeo"].get();
 	mazeWallleft2->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	mazeWallleft2->IndexCount = mazeWallleft2->Geo->DrawArgs["mazeWall"].IndexCount;
@@ -2896,7 +2896,7 @@ void FinalApp::BuilRenderMaze()
 	XMStoreFloat4x4(&mazeWallLeft3->World, XMMatrixScaling(40.0f, 15.0f, 3.0f)* XMMatrixTranslation(-21.5f, 5.0f, -156.5f));
 	XMStoreFloat4x4(&mazeWallLeft3->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
 	mazeWallLeft3->ObjCBIndex = objCBIndex++;
-	mazeWallLeft3->Mat = mMaterials["water"].get();
+	mazeWallLeft3->Mat = mMaterials["bush"].get();
 	mazeWallLeft3->Geo = mGeometries["mazeWallGeo"].get();
 	mazeWallLeft3->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	mazeWallLeft3->IndexCount = mazeWallLeft3->Geo->DrawArgs["mazeWall"].IndexCount;
@@ -2904,7 +2904,11 @@ void FinalApp::BuilRenderMaze()
 	mazeWallLeft3->BaseVertexLocation = mazeWallLeft3->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
 
 	BoundingBox boundsMaze11;
+<<<<<<< HEAD
 	XMStoreFloat3(&boundsMaze11.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-21.5f, 5.0f, -156.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-21.5f, 5.0f, -156.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-21.5f, 5.0f, -156.5f).r[3]), 1.0f));
+=======
+	XMStoreFloat3(&boundsMaze11.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-31.5f, 5.0f, -156.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-31.5f, 5.0f, -156.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-31.5f, 5.0f, -156.5f).r[3]), 1.0f));
+>>>>>>> cc4ff4b53148152aaeb32142df637f0d2ad5be5f
 	XMStoreFloat3(&boundsMaze11.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[0]), XMVectorGetY(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[1]), XMVectorGetZ(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[2]), 1.0f));
 
 	mazeWallLeft3->Bounds = boundsMaze11;//
@@ -2925,7 +2929,11 @@ void FinalApp::BuilRenderMaze()
 	mazeWallLeft4->BaseVertexLocation = mazeWallLeft4->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
 
 	BoundingBox boundsMaze12;
+<<<<<<< HEAD
 	XMStoreFloat3(&boundsMaze12.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-11.5f, 5.0f, -135.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-11.5f, 5.0f, -135.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-11.5f, 5.0f, -135.5f).r[3]), 1.0f));
+=======
+	XMStoreFloat3(&boundsMaze12.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-11.5f, 5.0f, -156.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-11.5f, 5.0f, -156.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-11.5f, 5.0f, -156.5f).r[3]), 1.0f));
+>>>>>>> cc4ff4b53148152aaeb32142df637f0d2ad5be5f
 	XMStoreFloat3(&boundsMaze12.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[0]), XMVectorGetY(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[1]), XMVectorGetZ(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[2]), 1.0f));
 
 	mazeWallLeft4->Bounds = boundsMaze12;//
