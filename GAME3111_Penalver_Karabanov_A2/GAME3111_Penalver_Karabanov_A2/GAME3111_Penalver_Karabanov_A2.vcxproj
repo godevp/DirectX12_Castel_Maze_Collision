@@ -179,6 +179,12 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\Textures\Bush.dds" />
+    <Image Include="..\..\Textures\water10.dds" />
+    <Image Include="..\..\Textures\water11.dds" />
+    <Image Include="..\..\Textures\water5.dds" />
+    <Image Include="..\..\Textures\water7.dds" />
+    <Image Include="..\..\Textures\water8.dds" />
+    <Image Include="..\..\Textures\water9.dds" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -99,5 +99,23 @@
     <Image Include="..\..\Textures\Bush.dds">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="..\..\Textures\water5.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\Textures\water7.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\Textures\water8.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\Textures\water9.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\Textures\water10.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\Textures\water11.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

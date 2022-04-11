@@ -198,7 +198,7 @@ bool FinalApp::Initialize()
 
     mCbvSrvDescriptorSize = md3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	mCamera.SetPosition(0.0f, 30.0f, -255.0f);
-    mWaves = std::make_unique<Waves>(200, 200,2.00f, 0.13f, 0.130f, 0.812f);
+    mWaves = std::make_unique<Waves>(200, 200, 2.50f, 0.3f, 0.5130f, 0.112f);
 	
 	LoadTextures();
     BuildRootSignature();
@@ -428,8 +428,8 @@ void FinalApp::AnimateMaterials(const GameTimer& gt)
 	float& tu = waterMat->MatTransform(3, 0);
 	float& tv = waterMat->MatTransform(3, 1);
 
-	tu += 0.1f * gt.DeltaTime();
-	tv += 0.02f * gt.DeltaTime();
+	tu += 0.21f * gt.DeltaTime();
+	tv += 0.202f * gt.DeltaTime();
 
 	if(tu >= 1.0f)
 		tu -= 1.0f;
@@ -437,8 +437,8 @@ void FinalApp::AnimateMaterials(const GameTimer& gt)
 	if(tv >= 1.0f)
 		tv -= 1.0f;
 
-	waterMat->MatTransform(3, 0) = tu;
-	waterMat->MatTransform(3, 1) = tv;
+	waterMat->MatTransform(2, 1) = tu;
+	waterMat->MatTransform(4, 1) = tv;
 
 	// Material has changed, so need to update cbuffer.
 	waterMat->NumFramesDirty = gNumFrameResources;
@@ -595,8 +595,8 @@ void FinalApp::UpdateWaves(const GameTimer& gt)
 		
 		// Derive tex-coords from position by 
 		// mapping [-w/2,w/2] --> [0,1]
-		v.TexC.x = 0.5f + v.Pos.x / mWaves->Width();
-		v.TexC.y = 0.5f - v.Pos.z / mWaves->Depth();
+		v.TexC.x = 1.15f + v.Pos.x / mWaves->Width();
+		v.TexC.y = 1.15f - v.Pos.z / mWaves->Depth();
 
 		currWavesVB->CopyData(i, v);
 	}
@@ -616,7 +616,7 @@ void FinalApp::LoadTextures()
 
 	auto waterTex = std::make_unique<Texture>();
 	waterTex->Name = "waterTex";
-	waterTex->Filename = L"../../Textures/water1.dds";
+	waterTex->Filename = L"../../Textures/water8.dds";
 	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
 		mCommandList.Get(), waterTex->Filename.c_str(),
 		waterTex->Resource, waterTex->UploadHeap));
@@ -1922,9 +1922,9 @@ void FinalApp::BuildMaterials()
 	water->Name = "water";
 	water->MatCBIndex = 1;
 	water->DiffuseSrvHeapIndex = 1;
-	water->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 0.5f);
-	water->FresnelR0 = XMFLOAT3(0.1f, 0.1f, 0.1f);
-	water->Roughness = 0.0f;
+	water->DiffuseAlbedo = XMFLOAT4(0.80f, 0.80f, 0.90f, 0.45f);
+	water->FresnelR0 = XMFLOAT3(0.91f, 0.91f, 0.91f);
+	water->Roughness = 0.10f;
 
 	auto wirefence = std::make_unique<Material>();
 	wirefence->Name = "wirefence";
@@ -2013,7 +2013,7 @@ void FinalApp::BuildRenderItems()
 	UINT objCBIndex = 4;
     auto wavesRitem = std::make_unique<RenderItem>();
     wavesRitem->World = MathHelper::Identity4x4();
-	XMStoreFloat4x4(&wavesRitem->TexTransform, XMMatrixScaling(15.0f, 15.0f, 1.0f));
+	XMStoreFloat4x4(&wavesRitem->TexTransform, XMMatrixScaling(35.0f, 35.0f, 1.0f));
 	XMStoreFloat4x4(&wavesRitem->World, XMMatrixScaling(2.0f, 1.0f, 2.0f) * XMMatrixTranslation(0.0f, -1.0f ,0.0f));
 	wavesRitem->ObjCBIndex = 0;
 	wavesRitem->Mat = mMaterials["water"].get();
