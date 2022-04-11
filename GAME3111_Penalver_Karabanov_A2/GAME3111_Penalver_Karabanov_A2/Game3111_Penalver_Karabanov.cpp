@@ -1949,7 +1949,7 @@ void FinalApp::BuildRenderItems()
 	m_Wall_R1->BaseVertexLocation = m_Wall_R1->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
 
 	BoundingBox bounds2;
-	XMStoreFloat3(&bounds2.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(25.0f, 0.0f, 0.0f).r[3]), XMVectorGetY(XMMatrixTranslation(25.0f, 0.5f, 0.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(25.0f,0.5f, 0.0f).r[3]), 1.0f));
+	XMStoreFloat3(&bounds2.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(25.0f, 37.5f, 0.0f).r[3]), XMVectorGetY(XMMatrixTranslation(25.0f, 37.5f, 0.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(25.0f, 37.5f, 0.0f).r[3]), 1.0f));
 	XMStoreFloat3(&bounds2.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(2.0f, 16.0f, 50.0f).r[0]), XMVectorGetY(XMMatrixScaling(2.0f, 16.0f, 50.0f).r[1]), XMVectorGetZ(XMMatrixScaling(2.0f, 16.0f, 50.0f).r[2]), 1.0f));
 
 	m_Wall_R1->Bounds = bounds2;//
@@ -2695,7 +2695,7 @@ void FinalApp::BuilRenderMaze()
 	auto boxRitem5 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&boxRitem5->World, XMMatrixScaling(3.0f, 15.0f, 29.0f) * XMMatrixTranslation(7.0f, 5.0f, -83.0f));
 
-	XMStoreFloat4x4(&boxRitem5->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
+	XMStoreFloat4x4(&boxRitem5->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
 	boxRitem5->ObjCBIndex = objCBIndex++;
 	boxRitem5->Mat = mMaterials["bush"].get();
 	boxRitem5->Geo = mGeometries["mazeWallGeo"].get();
@@ -2719,7 +2719,7 @@ void FinalApp::BuilRenderMaze()
 
 	auto mazeWallRight = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&mazeWallRight->World, XMMatrixScaling(40.0f, 15.0f, 3.0f) * XMMatrixTranslation(27.0f, 5.0f, -85.0f));
-	XMStoreFloat4x4(&mazeWallRight->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
+	XMStoreFloat4x4(&mazeWallRight->TexTransform, XMMatrixScaling(4.0, 2.0f, 2.0f));
 	mazeWallRight->ObjCBIndex = objCBIndex++;
 	mazeWallRight->Mat = mMaterials["bush"].get();
 	mazeWallRight->Geo = mGeometries["mazeWallGeo"].get();
@@ -2741,7 +2741,7 @@ void FinalApp::BuilRenderMaze()
 
 	auto mazeWallRight2 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&mazeWallRight2->World, XMMatrixScaling(3.0f, 15.0f, 70.0f) * XMMatrixTranslation(48.5f, 5.0f, -118.5f));
-	XMStoreFloat4x4(&mazeWallRight2->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
+	XMStoreFloat4x4(&mazeWallRight2->TexTransform, XMMatrixScaling(4.0, 2.0f, 6.0f));
 	mazeWallRight2->ObjCBIndex = objCBIndex++;
 	mazeWallRight2->Mat = mMaterials["bush"].get();
 	mazeWallRight2->Geo = mGeometries["mazeWallGeo"].get();
@@ -2762,7 +2762,7 @@ void FinalApp::BuilRenderMaze()
 
 	auto mazeWallRight3 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&mazeWallRight3->World, XMMatrixScaling(3.0f, 15.0f, 49.0f) * XMMatrixTranslation( 35.0f, 5.0f, -124.0f));
-	XMStoreFloat4x4(&mazeWallRight3->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
+	XMStoreFloat4x4(&mazeWallRight3->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
 	mazeWallRight3->ObjCBIndex = objCBIndex++;
 	mazeWallRight3->Mat = mMaterials["bush"].get();
 	mazeWallRight3->Geo = mGeometries["mazeWallGeo"].get();
@@ -2784,7 +2784,7 @@ void FinalApp::BuilRenderMaze()
 
 	auto mazeWallRight4 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&mazeWallRight4->World, XMMatrixScaling(3.0f, 15.0f, 49.0f)* XMMatrixTranslation(20.0f, 5.0f, -124.0f));
-	XMStoreFloat4x4(&mazeWallRight4->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
+	XMStoreFloat4x4(&mazeWallRight4->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
 	mazeWallRight4->ObjCBIndex = objCBIndex++;
 	mazeWallRight4->Mat = mMaterials["bush"].get();
 	mazeWallRight4->Geo = mGeometries["mazeWallGeo"].get();
@@ -2806,7 +2806,7 @@ void FinalApp::BuilRenderMaze()
 
 	auto mazeWallRight5 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&mazeWallRight5->World, XMMatrixScaling(13.0f, 15.0f, 3.0f)* XMMatrixTranslation(27.0f, 5.0f, -147.0f));
-	XMStoreFloat4x4(&mazeWallRight5->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
+	XMStoreFloat4x4(&mazeWallRight5->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
 	mazeWallRight5->ObjCBIndex = objCBIndex++;
 	mazeWallRight5->Mat = mMaterials["bush"].get();
 	mazeWallRight5->Geo = mGeometries["mazeWallGeo"].get();
@@ -2828,7 +2828,7 @@ void FinalApp::BuilRenderMaze()
 
 	auto mazeWallRight6 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&mazeWallRight6->World, XMMatrixScaling(33.0f, 15.0f, 3.0f)* XMMatrixTranslation(5.0f, 5.0f, -98.0f));
-	XMStoreFloat4x4(&mazeWallRight6->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
+	XMStoreFloat4x4(&mazeWallRight6->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
 	mazeWallRight6->ObjCBIndex = objCBIndex++;
 	mazeWallRight6->Mat = mMaterials["bush"].get();
 	mazeWallRight6->Geo = mGeometries["mazeWallGeo"].get();
@@ -2851,7 +2851,7 @@ void FinalApp::BuilRenderMaze()
 	//MAZE WALL LEFT SIDE
 	auto mazeWallLeft = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&mazeWallLeft->World, XMMatrixScaling(40.0f, 15.0f, 3.0f)* XMMatrixTranslation(-28.5f, 5.0f, -86.5f));
-	XMStoreFloat4x4(&mazeWallLeft->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
+	XMStoreFloat4x4(&mazeWallLeft->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
 	mazeWallLeft->ObjCBIndex = objCBIndex++;
 	mazeWallLeft->Mat = mMaterials["bush"].get();
 	mazeWallLeft->Geo = mGeometries["mazeWallGeo"].get();
@@ -2872,7 +2872,7 @@ void FinalApp::BuilRenderMaze()
 
 	auto mazeWallleft2 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&mazeWallleft2->World, XMMatrixScaling(3.0f, 15.0f, 70.0f)* XMMatrixTranslation(-50.0f, 5.0f, -120.0f));
-	XMStoreFloat4x4(&mazeWallleft2->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
+	XMStoreFloat4x4(&mazeWallleft2->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
 	mazeWallleft2->ObjCBIndex = objCBIndex++;
 	mazeWallleft2->Mat = mMaterials["bush"].get();
 	mazeWallleft2->Geo = mGeometries["mazeWallGeo"].get();
@@ -2893,8 +2893,8 @@ void FinalApp::BuilRenderMaze()
 
 
 	auto mazeWallLeft3 = std::make_unique<RenderItem>();
-	XMStoreFloat4x4(&mazeWallLeft3->World, XMMatrixScaling(40.0f, 15.0f, 3.0f)* XMMatrixTranslation(-21.5f, 5.0f, -156.5f));
-	XMStoreFloat4x4(&mazeWallLeft3->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
+	XMStoreFloat4x4(&mazeWallLeft3->World, XMMatrixScaling(40.0f, 15.0f, 3.0f)* XMMatrixTranslation(-23.5f, 5.0f, -156.5f));
+	XMStoreFloat4x4(&mazeWallLeft3->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
 	mazeWallLeft3->ObjCBIndex = objCBIndex++;
 	mazeWallLeft3->Mat = mMaterials["bush"].get();
 	mazeWallLeft3->Geo = mGeometries["mazeWallGeo"].get();
@@ -2906,7 +2906,7 @@ void FinalApp::BuilRenderMaze()
 	BoundingBox boundsMaze11;
 	
 	//HEAD
-	XMStoreFloat3(&boundsMaze11.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-21.5f, 5.0f, -156.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-21.5f, 5.0f, -156.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-21.5f, 5.0f, -156.5f).r[3]), 1.0f));
+	XMStoreFloat3(&boundsMaze11.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-23.5f, 5.0f, -156.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-23.5f, 5.0f, -156.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-23.5f, 5.0f, -156.5f).r[3]), 1.0f));
 //
 	
 
@@ -2964,8 +2964,8 @@ void FinalApp::BuilRenderMaze()
 
 
 	auto mazeWallLeft6 = std::make_unique<RenderItem>();
-	XMStoreFloat4x4(&mazeWallLeft6->World, XMMatrixScaling(40.0f, 15.0f, 3.0f)* XMMatrixTranslation(25.5f, 5.0f, -156.5f));
-	XMStoreFloat4x4(&mazeWallLeft6->TexTransform, XMMatrixScaling(22.0f, 13.0f, 2.0f));
+	XMStoreFloat4x4(&mazeWallLeft6->World, XMMatrixScaling(40.0f, 15.0f, 3.0f)* XMMatrixTranslation(22.5f, 5.0f, -156.5f));
+	XMStoreFloat4x4(&mazeWallLeft6->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
 	mazeWallLeft6->ObjCBIndex = objCBIndex++;
 	mazeWallLeft6->Mat = mMaterials["bush"].get();
 	mazeWallLeft6->Geo = mGeometries["mazeWallGeo"].get();
@@ -2975,7 +2975,7 @@ void FinalApp::BuilRenderMaze()
 	mazeWallLeft6->BaseVertexLocation = mazeWallLeft6->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
 
 	BoundingBox boundsMaze14;
-	XMStoreFloat3(&boundsMaze14.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(25.5f, 5.0f, -156.5f).r[3]), XMVectorGetY(XMMatrixTranslation(25.5f, 5.0f, -156.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(25.5f, 5.0f, -156.5f).r[3]), 1.0f));
+	XMStoreFloat3(&boundsMaze14.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(22.5f, 5.0f, -156.5f).r[3]), XMVectorGetY(XMMatrixTranslation(22.5f, 5.0f, -156.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(22.5f, 5.0f, -156.5f).r[3]), 1.0f));
 	XMStoreFloat3(&boundsMaze14.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[0]), XMVectorGetY(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[1]), XMVectorGetZ(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[2]), 1.0f));
 
 	mazeWallLeft6->Bounds = boundsMaze14;//
@@ -2983,6 +2983,116 @@ void FinalApp::BuilRenderMaze()
 	mRitemLayer[(int)RenderLayer::Opaque].push_back(mazeWallLeft6.get());
 	mAllRitems.push_back(std::move(mazeWallLeft6));
 
+
+
+	auto mazeWallLeft7 = std::make_unique<RenderItem>();
+	XMStoreFloat4x4(&mazeWallLeft7->World, XMMatrixScaling(40.0f, 15.0f, 3.0f)* XMMatrixTranslation(-15.5f, 5.0f, -110.5f));
+	XMStoreFloat4x4(&mazeWallLeft7->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
+	mazeWallLeft7->ObjCBIndex = objCBIndex++;
+	mazeWallLeft7->Mat = mMaterials["bush"].get();
+	mazeWallLeft7->Geo = mGeometries["mazeWallGeo"].get();
+	mazeWallLeft7->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	mazeWallLeft7->IndexCount = mazeWallLeft7->Geo->DrawArgs["mazeWall"].IndexCount;
+	mazeWallLeft7->StartIndexLocation = mazeWallLeft7->Geo->DrawArgs["mazeWall"].StartIndexLocation;
+	mazeWallLeft7->BaseVertexLocation = mazeWallLeft7->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
+
+	BoundingBox boundsMaze15;
+
+	//HEAD
+	XMStoreFloat3(&boundsMaze15.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-19.5f, 5.0f, -110.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-19.5f, 5.0f, -110.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-19.5f, 5.0f, -110.5f).r[3]), 1.0f));
+	XMStoreFloat3(&boundsMaze15.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[0]), XMVectorGetY(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[1]), XMVectorGetZ(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[2]), 1.0f));
+
+	mazeWallLeft7->Bounds = boundsMaze15;//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(mazeWallLeft7.get());
+	mAllRitems.push_back(std::move(mazeWallLeft7));
+
+
+
+	auto mazeWallLeft8 = std::make_unique<RenderItem>();
+	XMStoreFloat4x4(&mazeWallLeft8->World, XMMatrixScaling(25.0f, 15.0f, 3.0f)* XMMatrixTranslation(-24.5f, 5.0f, -135.5f));
+	XMStoreFloat4x4(&mazeWallLeft8->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
+	mazeWallLeft8->ObjCBIndex = objCBIndex++;
+	mazeWallLeft8->Mat = mMaterials["bush"].get();
+	mazeWallLeft8->Geo = mGeometries["mazeWallGeo"].get();
+	mazeWallLeft8->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	mazeWallLeft8->IndexCount = mazeWallLeft8->Geo->DrawArgs["mazeWall"].IndexCount;
+	mazeWallLeft8->StartIndexLocation = mazeWallLeft8->Geo->DrawArgs["mazeWall"].StartIndexLocation;
+	mazeWallLeft8->BaseVertexLocation = mazeWallLeft8->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
+
+	BoundingBox boundsMaze16;
+
+	//HEAD
+	XMStoreFloat3(&boundsMaze16.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-24.5f, 5.0f, -135.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-24.5f, 5.0f, -135.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-24.5f, 5.0f, -135.5f).r[3]), 1.0f));
+	XMStoreFloat3(&boundsMaze16.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(25.0f, 15.0f, 3.0f).r[0]), XMVectorGetY(XMMatrixScaling(25.0f, 15.0f, 3.0f).r[1]), XMVectorGetZ(XMMatrixScaling(25.0f, 15.0f, 3.0f).r[2]), 1.0f));
+
+	mazeWallLeft8->Bounds = boundsMaze16;//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(mazeWallLeft8.get());
+	mAllRitems.push_back(std::move(mazeWallLeft8));
+
+
+	auto mazeWallLeft9 = std::make_unique<RenderItem>();
+	XMStoreFloat4x4(&mazeWallLeft9->World, XMMatrixScaling(3.0f, 15.0f, 26.0f)* XMMatrixTranslation(-36.5f, 5.0f, -115.5f));
+	XMStoreFloat4x4(&mazeWallLeft9->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
+	mazeWallLeft9->ObjCBIndex = objCBIndex++;
+	mazeWallLeft9->Mat = mMaterials["bush"].get();
+	mazeWallLeft9->Geo = mGeometries["mazeWallGeo"].get();
+	mazeWallLeft9->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	mazeWallLeft9->IndexCount = mazeWallLeft9->Geo->DrawArgs["mazeWall"].IndexCount;
+	mazeWallLeft9->StartIndexLocation = mazeWallLeft9->Geo->DrawArgs["mazeWall"].StartIndexLocation;
+	mazeWallLeft9->BaseVertexLocation = mazeWallLeft9->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
+
+	BoundingBox boundsMaze17;
+	XMStoreFloat3(&boundsMaze17.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-36.5f, 5.0f, -115.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-36.5f, 5.0f, -115.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-36.5f, 5.0f, -115.5f).r[3]), 1.0f));
+	XMStoreFloat3(&boundsMaze17.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(3.0f, 15.0f, 26.0f).r[0]), XMVectorGetY(XMMatrixScaling(3.0f, 15.0f, 26.0f).r[1]), XMVectorGetZ(XMMatrixScaling(3.0f, 15.0f, 26.0f).r[2]), 1.0f));
+
+	mazeWallLeft9->Bounds = boundsMaze17;//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(mazeWallLeft9.get());
+	mAllRitems.push_back(std::move(mazeWallLeft9));
+
+
+	auto mazeWallLeft10 = std::make_unique<RenderItem>();
+	XMStoreFloat4x4(&mazeWallLeft10->World, XMMatrixScaling(3.0f, 15.0f, 22.0f)* XMMatrixTranslation(-26.5f, 5.0f, -98.5f));
+	XMStoreFloat4x4(&mazeWallLeft10->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
+	mazeWallLeft10->ObjCBIndex = objCBIndex++;
+	mazeWallLeft10->Mat = mMaterials["bush"].get();
+	mazeWallLeft10->Geo = mGeometries["mazeWallGeo"].get();
+	mazeWallLeft10->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	mazeWallLeft10->IndexCount = mazeWallLeft10->Geo->DrawArgs["mazeWall"].IndexCount;
+	mazeWallLeft10->StartIndexLocation = mazeWallLeft10->Geo->DrawArgs["mazeWall"].StartIndexLocation;
+	mazeWallLeft10->BaseVertexLocation = mazeWallLeft10->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
+
+	BoundingBox boundsMaze18;
+	XMStoreFloat3(&boundsMaze18.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-26.5f, 5.0f, -98.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-26.5f, 5.0f, -98.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-26.5f, 5.0f, -98.5f).r[3]), 1.0f));
+	XMStoreFloat3(&boundsMaze18.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(3.0f, 15.0f, 22.0f).r[0]), XMVectorGetY(XMMatrixScaling(3.0f, 15.0f, 22.0f).r[1]), XMVectorGetZ(XMMatrixScaling(3.0f, 15.0f, 22.0f).r[2]), 1.0f));
+
+	mazeWallLeft10->Bounds = boundsMaze18;//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(mazeWallLeft10.get());
+	mAllRitems.push_back(std::move(mazeWallLeft10));
+
+
+	auto mazeWallLeft11 = std::make_unique<RenderItem>();
+	XMStoreFloat4x4(&mazeWallLeft11->World, XMMatrixScaling(30.0f, 15.0f, 3.0f)* XMMatrixTranslation(-35.5f, 5.0f, -146.5f));
+	XMStoreFloat4x4(&mazeWallLeft11->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
+	mazeWallLeft11->ObjCBIndex = objCBIndex++;
+	mazeWallLeft11->Mat = mMaterials["bush"].get();
+	mazeWallLeft11->Geo = mGeometries["mazeWallGeo"].get();
+	mazeWallLeft11->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+	mazeWallLeft11->IndexCount = mazeWallLeft11->Geo->DrawArgs["mazeWall"].IndexCount;
+	mazeWallLeft11->StartIndexLocation = mazeWallLeft11->Geo->DrawArgs["mazeWall"].StartIndexLocation;
+	mazeWallLeft11->BaseVertexLocation = mazeWallLeft11->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
+
+	BoundingBox boundsMaze19;
+	XMStoreFloat3(&boundsMaze19.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-35.5f, 5.0f, -146.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-35.5f, 5.0f, -146.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-35.5f, 5.0f, -146.5f).r[3]), 1.0f));
+	XMStoreFloat3(&boundsMaze19.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(30.0f, 15.0f, 3.0f).r[0]), XMVectorGetY(XMMatrixScaling(30.0f, 15.0f, 3.0f).r[1]), XMVectorGetZ(XMMatrixScaling(30.0f, 15.0f, 3.0f).r[2]), 1.0f));
+
+	mazeWallLeft11->Bounds = boundsMaze19;//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(mazeWallLeft11.get());
+	mAllRitems.push_back(std::move(mazeWallLeft11));
 
 }
 void FinalApp::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<RenderItem*>& ritems)
