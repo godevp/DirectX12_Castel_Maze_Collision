@@ -1938,7 +1938,7 @@ void FinalApp::BuildRenderItems()
 
 	auto m_Wall_R1 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&m_Wall_R1->TexTransform, XMMatrixScaling(9.0f,5.0f,1.0f));
-	XMStoreFloat4x4(&m_Wall_R1->World, XMMatrixScaling(2.0f, 4.0f, 2.0f) * XMMatrixTranslation(25.0f, 37.5f, 0.0f));
+	XMStoreFloat4x4(&m_Wall_R1->World, XMMatrixScaling(2.0f, 4.0f, 2.0f) * XMMatrixTranslation(25.0f, 7.5f, 0.0f));
 
 	m_Wall_R1->ObjCBIndex = objCBIndex++;
 	m_Wall_R1->Mat = mMaterials["wall"].get();
@@ -1950,7 +1950,7 @@ void FinalApp::BuildRenderItems()
 
 	BoundingBox bounds2;
 	XMStoreFloat3(&bounds2.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(25.0f, 0.0f, 0.0f).r[3]), XMVectorGetY(XMMatrixTranslation(25.0f, 0.5f, 0.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(25.0f,0.5f, 0.0f).r[3]), 1.0f));
-	XMStoreFloat3(&bounds2.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(2.0f, 16.0f, 50.0f).r[0]), XMVectorGetY(XMMatrixScaling(2.0f, 16.0f, 50.0f).r[1]), XMVectorGetZ(XMMatrixScaling(2.0f, 16.0f, 50.0f).r[2]), 1.0f));
+	XMStoreFloat3(&bounds2.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(2.0f, 16.0f * 2.4f, 50.0f).r[0]), XMVectorGetY(XMMatrixScaling(2.0f, 16.0f * 2.4f, 50.0f).r[1]), XMVectorGetZ(XMMatrixScaling(2.0f, 16.0f * 3, 50.0f).r[2]), 1.0f));
 
 	m_Wall_R1->Bounds = bounds2;//
 
@@ -1968,7 +1968,13 @@ void FinalApp::BuildRenderItems()
 	m_Wall_2->IndexCount = m_Wall_2->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_2->StartIndexLocation = m_Wall_2->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_2->BaseVertexLocation = m_Wall_2->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_2.get());
+	BoundingBox bounds3;
+	XMStoreFloat3(&bounds3.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-25.0f, 7.5f, 0.0f).r[3]), XMVectorGetY(XMMatrixTranslation(-25.0f, 7.5f, 0.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(-25.0f, 7.5f, 0.0f).r[3]), 1.0f));
+	XMStoreFloat3(&bounds3.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(2.0f, 16.0f * 1.5f, 50.0f).r[0]), XMVectorGetY(XMMatrixScaling(2.0f, 16.0f * 1.5f, 50.0f).r[1]), XMVectorGetZ(XMMatrixScaling(2.0f, 16.0f * 1.5f, 50.0f).r[2]), 1.0f));
+
+	m_Wall_2->Bounds = bounds3;//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_2.get());
 
 	auto m_Wall_3 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&m_Wall_3->TexTransform, XMMatrixScaling(9.0f, 5.0f, 1.0f));
@@ -1980,7 +1986,13 @@ void FinalApp::BuildRenderItems()
 	m_Wall_3->IndexCount = m_Wall_3->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_3->StartIndexLocation = m_Wall_3->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_3->BaseVertexLocation = m_Wall_3->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_3.get());
+	BoundingBox bounds4;
+	XMStoreFloat3(&bounds4.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(0.0f, 7.5f, -25.0f).r[3]), XMVectorGetY(XMMatrixTranslation(0.0f, 7.5f, -25.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(0.0f, 7.5f, -25.0f).r[3]), 1.0f));
+	XMStoreFloat3(&bounds4.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(50.0f, 16.0f * 1.5f, 2.5f).r[0]), XMVectorGetY(XMMatrixScaling(50.0f, 16.0f * 1.5f, 2.5f).r[1]), XMVectorGetZ(XMMatrixScaling(50.0f, 16.0f * 1.5f, 2.5f).r[2]), 1.0f));
+
+	m_Wall_3->Bounds = bounds4;//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_3.get());
 
 	auto m_Wall_4 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&m_Wall_4->TexTransform, XMMatrixScaling(9.0f, 5.0f, 1.0f));
@@ -1992,7 +2004,13 @@ void FinalApp::BuildRenderItems()
 	m_Wall_4->IndexCount = m_Wall_3->Geo->DrawArgs["m_Walls"].IndexCount;
 	m_Wall_4->StartIndexLocation = m_Wall_4->Geo->DrawArgs["m_Walls"].StartIndexLocation;
 	m_Wall_4->BaseVertexLocation = m_Wall_4->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
-	mRitemLayer[(int)RenderLayer::AlphaTested].push_back(m_Wall_4.get());
+	BoundingBox bounds5;
+	XMStoreFloat3(&bounds5.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(0.0f, 7.5f, 25.0f).r[3]), XMVectorGetY(XMMatrixTranslation(0.0f, 7.5f, 25.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(0.0f, 7.5f, 25.0f).r[3]), 1.0f));
+	XMStoreFloat3(&bounds5.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(50.0f, 16.0f * 1.5f, 2.5f).r[0]), XMVectorGetY(XMMatrixScaling(50.0f, 16.0f * 1.5f, 2.5f).r[1]), XMVectorGetZ(XMMatrixScaling(50.0f, 16.0f * 1.5f, 2.5f).r[2]), 1.0f));
+
+	m_Wall_4->Bounds = bounds5;//
+
+	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_4.get());
 
     mAllRitems.push_back(std::move(wavesRitem));
     mAllRitems.push_back(std::move(gridRitem));
