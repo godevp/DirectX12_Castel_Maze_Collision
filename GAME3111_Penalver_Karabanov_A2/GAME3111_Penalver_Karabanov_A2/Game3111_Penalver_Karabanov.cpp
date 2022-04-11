@@ -146,11 +146,11 @@ private:
 	XMFLOAT4X4 mView = MathHelper::Identity4x4();
 	XMFLOAT4X4 mProj = MathHelper::Identity4x4();
 
-    float mTheta = 1.5f*XM_PI;
+    /*float mTheta = 1.5f*XM_PI;
     float mPhi = XM_PIDIV2 - 0.1f;
-    float mRadius = 50.0f;
+    float mRadius = 50.0f;*/
 	float c_distance = 0.0f;
-	const float kHitDist = 7.0f;
+	const float kHitDist = 8.0f;
     POINT mLastMousePos;
 };
 
