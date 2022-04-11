@@ -2949,7 +2949,7 @@ void FinalApp::BuilRenderMaze()
 	boxRitem4->BaseVertexLocation = boxRitem4->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
 	BoundingBox boundsMaze;
 	XMStoreFloat3(&boundsMaze.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-7.0f, 5.0f, -78.0f).r[3]), XMVectorGetY(XMMatrixTranslation(-7.0f, 5.0f, -78.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(-7.0f, 5.0f, -78.0f).r[3]), 1.0f));
-	XMStoreFloat3(&boundsMaze.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(3.0f, 15.0f, 1.0f).r[0]), XMVectorGetY(XMMatrixScaling(3.0f, 15.0f, 1.0f).r[1]), XMVectorGetZ(XMMatrixScaling(3.0f, 15.0f, 1.0f).r[2]), 1.0f));
+	XMStoreFloat3(&boundsMaze.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[0]), XMVectorGetY(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[1]), XMVectorGetZ(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[2]), 1.0f));
 	boxRitem4->Bounds = boundsMaze;//
 
 	mRitemLayer[(int)RenderLayer::Opaque].push_back(boxRitem4.get());
