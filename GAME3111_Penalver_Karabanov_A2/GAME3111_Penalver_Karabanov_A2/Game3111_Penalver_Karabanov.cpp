@@ -517,10 +517,10 @@ void FinalApp::UpdateMainPassCB(const GameTimer& gt)
 	mMainPassCB.FarZ = 3000.0f;
 	mMainPassCB.TotalTime = gt.TotalTime();
 	mMainPassCB.DeltaTime = gt.DeltaTime();
-	mMainPassCB.AmbientLight = { 0.325f, 0.325f, 0.325f, 1.0f };
+	mMainPassCB.AmbientLight = { 0.4725f, 0.4725f, 0.4725f, 1.0f };
 	//direction light
 	mMainPassCB.Lights[0].Direction = { 0.0f, -0.27735f, 0.57735f };
-	mMainPassCB.Lights[0].Strength = { 0.3f, 0.3f, 0.5f };
+	mMainPassCB.Lights[0].Strength = { 0.3f, 0.3f, 0.45f };
 
 	//point lights
 																									   //
@@ -548,6 +548,7 @@ void FinalApp::UpdateMainPassCB(const GameTimer& gt)
 
 	mMainPassCB.Lights[7].Position = { 34.0f, 10.0f, 34.0f };										   //Centre light
 	mMainPassCB.Lights[7].Strength = { 1.0, 0.3f, 0.0f };
+
 
 	mMainPassCB.Lights[8].Position = { 34.0f, 10.0f, 4.0f };										   //Centre light
 	mMainPassCB.Lights[8].Strength = { 1.0, 0.3f, 0.0f };
