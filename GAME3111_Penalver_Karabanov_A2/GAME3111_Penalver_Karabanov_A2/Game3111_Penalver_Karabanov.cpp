@@ -20,34 +20,18 @@ using namespace DirectX::PackedVector;
 const int gNumFrameResources = 3;
 float rotAngle = 1;
 
-// Lightweight structure stores parameters to draw a shape.  This will
-// vary from app-to-app.
 struct RenderItem
 {
 	RenderItem() = default;
-
-    // World matrix of the shape that describes the object's local space
-    // relative to the world space, which defines the position, orientation,
-    // and scale of the object in the world.
     XMFLOAT4X4 World = MathHelper::Identity4x4();
-
 	XMFLOAT4X4 TexTransform = MathHelper::Identity4x4();
-
-	// Dirty flag indicating the object data has changed and we need to update the constant buffer.
-	// Because we have an object cbuffer for each FrameResource, we have to apply the
-	// update to each FrameResource.  Thus, when we modify obect data we should set 
-	// NumFramesDirty = gNumFrameResources so that each frame resource gets the update.
 	int NumFramesDirty = gNumFrameResources;
 
 	// Index into GPU constant buffer corresponding to the ObjectCB for this render item.
 	UINT ObjCBIndex = -1;
-
 	Material* Mat = nullptr;
 	MeshGeometry* Geo = nullptr;
-
-
 	BoundingBox Bounds;
-
     // Primitive topology.
     D3D12_PRIMITIVE_TOPOLOGY PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
@@ -74,7 +58,6 @@ public:
     FinalApp(const FinalApp& rhs) = delete;
     FinalApp& operator=(const FinalApp& rhs) = delete;
     ~FinalApp();
-
     virtual bool Initialize()override;
 
 private:
@@ -124,7 +107,6 @@ private:
 	void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<RenderItem*>& ritems);
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
-
     float GetHillsHeight(float x, float z)const;
     XMFLOAT3 GetHillsNormal(float x, float z)const;
 
@@ -137,7 +119,6 @@ private:
     UINT mCbvSrvDescriptorSize = 0;
 
     ComPtr<ID3D12RootSignature> mRootSignature = nullptr;
-
 	ComPtr<ID3D12DescriptorHeap> mSrvDescriptorHeap = nullptr;
 
 	std::unordered_map<std::string, std::unique_ptr<MeshGeometry>> mGeometries;
@@ -168,7 +149,7 @@ private:
     float mTheta = 1.5f*XM_PI;
     float mPhi = XM_PIDIV2 - 0.1f;
     float mRadius = 50.0f;
-	float c_dist = 0.0f;
+	float c_distance = 0.0f;
 	const float kHitDist = 7.0f;
     POINT mLastMousePos;
 };
@@ -215,8 +196,6 @@ bool FinalApp::Initialize()
     // Reset the command list to prep for initialization commands.
     ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
-    // Get the increment size of a descriptor in this heap type.  This is hardware specific, 
-	// so we have to query this information.
     mCbvSrvDescriptorSize = md3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	mCamera.SetPosition(0.0f, 30.0f, -255.0f);
     mWaves = std::make_unique<Waves>(200, 200,2.00f, 0.13f, 0.130f, 0.812f);
@@ -254,7 +233,6 @@ bool FinalApp::Initialize()
 
     // Wait until initialization is complete.
     FlushCommandQueue();
-
     return true;
 }
  
@@ -262,7 +240,6 @@ void FinalApp::OnResize()
 {
     D3DApp::OnResize();
 
-    // The window resized, so update the aspect ratio and recompute the projection matrix.
 	mCamera.SetLens(0.35f * MathHelper::Pi, AspectRatio(), 1.0f, 5000.0f);
 }
 
@@ -270,14 +247,9 @@ void FinalApp::Update(const GameTimer& gt)
 {
 	
     OnKeyboardInput(gt);
-	//UpdateCamera(gt);
-
-    // Cycle through the circular frame resource array.
     mCurrFrameResourceIndex = (mCurrFrameResourceIndex + 1) % gNumFrameResources;
     mCurrFrameResource = mFrameResources[mCurrFrameResourceIndex].get();
 
-    // Has the GPU finished processing the commands of the current frame resource?
-    // If not, wait until the GPU has completed commands up to this fence point.
     if(mCurrFrameResource->Fence != 0 && mFence->GetCompletedValue() < mCurrFrameResource->Fence)
     {
         HANDLE eventHandle = CreateEventEx(nullptr, nullptr, false, EVENT_ALL_ACCESS);
@@ -298,13 +270,7 @@ void FinalApp::Update(const GameTimer& gt)
 void FinalApp::Draw(const GameTimer& gt)
 {
     auto cmdListAlloc = mCurrFrameResource->CmdListAlloc;
-
-    // Reuse the memory associated with command recording.
-    // We can only reset when the associated command lists have finished execution on the GPU.
     ThrowIfFailed(cmdListAlloc->Reset());
-
-    // A command list can be reset after it has been added to the command queue via ExecuteCommandList.
-    // Reusing the command list reuses memory.
     ThrowIfFailed(mCommandList->Reset(cmdListAlloc.Get(), mPSOs["opaque"].Get()));
 
     mCommandList->RSSetViewports(1, &mScreenViewport);
@@ -358,9 +324,6 @@ void FinalApp::Draw(const GameTimer& gt)
     // Advance the fence value to mark commands up to this fence point.
     mCurrFrameResource->Fence = ++mCurrentFence;
 
-    // Add an instruction to the command queue to set a new fence point. 
-    // Because we are on the GPU timeline, the new fence point won't be 
-    // set until the GPU finishes processing all the commands prior to this Signal().
     mCommandQueue->Signal(mFence.Get(), mCurrentFence);
 }
 
@@ -404,35 +367,35 @@ void FinalApp::OnKeyboardInput(const GameTimer& gt)
 
 	for (int i = 0; i < mRitemLayer[(int)RenderLayer::Opaque].size(); i++)
 	{
-		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(), mCamera.GetLook(), c_dist)) && c_dist < kHitDist)
+		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(), mCamera.GetLook(), c_distance)) && c_distance < kHitDist)
 			move_w = false;
 
 
-		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(), -1.0f * mCamera.GetLook(), c_dist)) && c_dist < kHitDist)
+		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(), -1.0f * mCamera.GetLook(), c_distance)) && c_distance < kHitDist)
 			move_s = false;
 
-		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(), -1.0f * mCamera.GetRight(), c_dist)) && c_dist < kHitDist)
+		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(), -1.0f * mCamera.GetRight(), c_distance)) && c_distance < kHitDist)
 			move_a = false;
 
-		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(), mCamera.GetRight(), c_dist)) && c_dist < kHitDist) 
+		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(), mCamera.GetRight(), c_distance)) && c_distance < kHitDist) 
 		{
 			move_d = false;
 		}
 
 
-		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(), -1.0f * mCamera.GetUp(), c_dist)) && c_dist < kHitDist)
+		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(), -1.0f * mCamera.GetUp(), c_distance)) && c_distance < kHitDist)
 			move_q = false;
 
-		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(),  mCamera.GetUp(), c_dist)) && c_dist < kHitDist)
+		if ((mRitemLayer[(int)RenderLayer::Opaque][i]->Bounds.Intersects(mCamera.GetPosition(),  mCamera.GetUp(), c_distance)) && c_distance < kHitDist)
 			move_e = false;
 	}
 	const float dt = gt.DeltaTime();
 
 	if ((GetAsyncKeyState('W') & 0x8000) && move_w)
-		mCamera.Walk(45.0f * dt);
+		mCamera.Walk(20.0f * dt);
 
 	if ((GetAsyncKeyState('S') & 0x8000) && move_s)
-		mCamera.Walk(-45.0f * dt);
+		mCamera.Walk(-20.0f * dt);
 
 	if ((GetAsyncKeyState('A') & 0x8000) && move_a)
 		mCamera.Strafe(-25.0f * dt);
@@ -442,10 +405,10 @@ void FinalApp::OnKeyboardInput(const GameTimer& gt)
 
 
 	if ((GetAsyncKeyState('Q') & 0x8000) && move_q)
-		mCamera.Pedestal(-45.0f * dt);
+		mCamera.Pedestal(-20.0f * dt);
 
 	if ((GetAsyncKeyState('E') & 0x8000) && move_e )
-		mCamera.Pedestal(45.0f * dt);
+		mCamera.Pedestal(20.0f * dt);
 
 	mCamera.UpdateViewMatrix();
 
@@ -455,19 +418,6 @@ void FinalApp::OnKeyboardInput(const GameTimer& gt)
 void FinalApp::UpdateCamera(const GameTimer& gt)
 {
 
-	//	// Convert Spherical to Cartesian coordinates.
-	//	mEyePos.x = mRadius*sinf(mPhi)*cosf(mTheta);
-	//	mEyePos.z = mRadius*sinf(mPhi)*sinf(mTheta);
-	//	mEyePos.y = mRadius*cosf(mPhi);
-	//
-	//	// Build the view matrix.
-	//	XMVECTOR pos = XMVectorSet(mEyePos.x, mEyePos.y, mEyePos.z, 1.0f);
-	//	XMVECTOR target = XMVectorZero();
-	//	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	//
-	//	XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
-	//	XMStoreFloat4x4(&mView, view);
-	//}
 }
 
 void FinalApp::AnimateMaterials(const GameTimer& gt)
@@ -592,7 +542,7 @@ void FinalApp::UpdateMainPassCB(const GameTimer& gt)
 																									   
 	mMainPassCB.Lights[5].Position = { 0.0f, 30.0f, 0.0f };										   //Centre light
 	mMainPassCB.Lights[5].Strength = { 5.35f, 5.35f, 5.35f };
-	//mMainPassCB.Lights[5].Strength = { 200.0f / 4.0f, 0.0f / 4.0f, 0.0f / 4.0f };				   // RED
+
 
 	mMainPassCB.Lights[6].Position = { 0.0f, 45.0f, 0.0f };
 	mMainPassCB.Lights[6].Direction = { 0.0f, -5.0f, 0.0f };
@@ -919,12 +869,6 @@ void FinalApp::BuildLandGeometry()
     GeometryGenerator geoGen;
     GeometryGenerator::MeshData grid = geoGen.CreateGrid(0.0f, 0.0f, 50, 50);
 
-    //
-    // Extract the vertex elements we are interested and apply the height function to
-    // each vertex.  In addition, color the vertices based on their height so we have
-    // sandy looking beaches, grassy low hills, and snow mountain peaks.
-    //
-
     std::vector<Vertex> vertices(grid.Vertices.size());
     for(size_t i = 0; i < grid.Vertices.size(); ++i)
     {
@@ -1075,7 +1019,6 @@ void FinalApp::BuildBoxGeometry()
 }
 void FinalApp::BuildTreeSpritesGeometry()
 {
-	//step5
 	struct TreeSpriteVertex
 	{
 		XMFLOAT3 Pos;
@@ -1975,10 +1918,6 @@ void FinalApp::BuildMaterials()
 	grass->FresnelR0 = XMFLOAT3(0.01f, 0.01f, 0.01f);
 	grass->Roughness = 0.125f;
 
-
-
-	// This is not a good water material definition, but we do not have all the rendering
-	// tools we need (transparency, environment reflection), so we fake it for now.
 	auto water = std::make_unique<Material>();
 	water->Name = "water";
 	water->MatCBIndex = 1;
@@ -2127,11 +2066,6 @@ void FinalApp::BuildRenderItems()
 	XMStoreFloat3(&bounds44.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(485.0f, 1.0f, 485.0f).r[0]), XMVectorGetY(XMMatrixScaling(485.0f, 1.0f, 485.0f).r[1]), XMVectorGetZ(XMMatrixScaling(485.0f, 1.0f, 485.0f).r[2]), 1.0f));
 
 	boxRitem->Bounds = bounds44;//
-	//BoundingBox bounds;
-	//XMStoreFloat3(&bounds.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(0.0f, 1.7f, -0.0f).r[3]), XMVectorGetY(XMMatrixTranslation(0.0f, 1.7f, -0.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(0.0f, 1.7f, -0.0f).r[3]), 1.0f));
-	//XMStoreFloat3(&bounds.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(25.0f, 25.0f, 25.0f).r[0]), XMVectorGetY(XMMatrixScaling(25.0f, 25.0f, 25.0f).r[1]), XMVectorGetZ(XMMatrixScaling(25.0f, 25.0f, 25.0f).r[2]), 1.0f));
-
-	//boxRitem->Bounds = bounds;//
 
 	mRitemLayer[(int)RenderLayer::Opaque].push_back(boxRitem.get());
 
@@ -2140,7 +2074,6 @@ void FinalApp::BuildRenderItems()
 	treeSpritesRitem->ObjCBIndex = 3;
 	treeSpritesRitem->Mat = mMaterials["treeSprites"].get();
 	treeSpritesRitem->Geo = mGeometries["treeSpritesGeo"].get();
-	//step2
 	treeSpritesRitem->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_POINTLIST;
 	treeSpritesRitem->IndexCount = treeSpritesRitem->Geo->DrawArgs["points"].IndexCount;
 	treeSpritesRitem->StartIndexLocation = treeSpritesRitem->Geo->DrawArgs["points"].StartIndexLocation;
@@ -2657,10 +2590,7 @@ void FinalApp::BuildRotationItems()
 	}
 
 	XMStoreFloat4x4(&Merlons2->World, XMMatrixScaling(10.0f, 10.0f, 10.0f) * XMMatrixRotationY(XMConvertToRadians(angle += 20 * mTimer.TotalTime())) * XMMatrixTranslation(0.0f, 34.0f, 0.0f));
-	//XMStoreFloat4x4(&Merlons2->World, XMMatrixScaling(10.0f, 10.0f, 10.0f) * XMMatrixTranslation(0.0f, 34.0f, 0.0f) * XMMatrixRotationY(XMConvertToRadians(45)));
-	//XMStoreFloat4x4(&Merlons2->World, XMMatrixRotationY(45));
 	XMStoreFloat4x4(&Merlons2->TexTransform, XMMatrixScaling(5.0f, 10.0f, 5.0f));
-	//XMMatrixRotationRollPitchYaw(0, 90, 0);
 	Merlons2->ObjCBIndex = objCBIndex++;
 	Merlons2->Mat = mMaterials["wall2"].get();
 	Merlons2->Geo = mGeometries["diamondGeo"].get();
@@ -2757,30 +2687,27 @@ void FinalApp::BuildRenderGate()
 	mAllRitems.push_back(std::move(boxRitem2));
 
 
-	// 
-	// 
-	// 
 	////MERLONS===============================================================MERLONS====================================///
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////																									
 	for (int i = 0; i < 88; ++i)																												//
 	{																																			//
 																																				//
-		auto Merlons = std::make_unique<RenderItem>();																	 							//
+		auto Merlons = std::make_unique<RenderItem>();																	 						//
 		if (i < 22)																																//
 		{																																		//
-			XMStoreFloat4x4(&Merlons->World, XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixTranslation(-21.0f + i * 2.0f, 16.0f, -25.0f));				//
+			XMStoreFloat4x4(&Merlons->World, XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixTranslation(-21.0f + i * 2.0f, 16.0f, -25.0f));		//
 		}																																		//
-		else if (i < 44)																															//
+		else if (i < 44)																														//
 		{																																		//
-			XMStoreFloat4x4(&Merlons->World, XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixTranslation(-21.0f + (i - 22) * 2.0f, 16.0f, 25.0f));		//
+			XMStoreFloat4x4(&Merlons->World, XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixTranslation(-21.0f + (i - 22) * 2.0f, 16.0f, 25.0f));	//
 		}																																		//
 		else if (i < 66)																														//
 		{																																		//
-			XMStoreFloat4x4(&Merlons->World, XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixTranslation(-25.0f, 16.0f, -21.0f + (i - 44) * 2.0f));		//
+			XMStoreFloat4x4(&Merlons->World, XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixTranslation(-25.0f, 16.0f, -21.0f + (i - 44) * 2.0f));	//
 		}																																		//
 		else																																	// Build wall's top
 		{																																		//
-			XMStoreFloat4x4(&Merlons->World, XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixTranslation(25.0f, 16.0f, -21.0f + (i - 66) * 2.0f));		//
+			XMStoreFloat4x4(&Merlons->World, XMMatrixScaling(1.0f, 1.0f, 1.0f) * XMMatrixTranslation(25.0f, 16.0f, -21.0f + (i - 66) * 2.0f));	//
 		}
 
 		Merlons->ObjCBIndex = objCBIndex++;//
@@ -2796,7 +2723,6 @@ void FinalApp::BuildRenderGate()
 
 
 	}
-
 
 
 	//outside walls + MAZE
@@ -2815,11 +2741,8 @@ void FinalApp::BuildRenderGate()
 	BoundingBox bound[20];
 	XMStoreFloat3(&bound[0].Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(55.0f, 7.5f, -6.250f).r[3]), XMVectorGetY(XMMatrixTranslation(55.0f, 7.5f, -6.250f).r[3]), XMVectorGetZ(XMMatrixTranslation(55.0f, 7.5f, -6.250f).r[3]), 1.0f));
 	XMStoreFloat3(&bound[0].Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(1.0f, 16.0f * 1.5f, 125.0f).r[0]), XMVectorGetY(XMMatrixScaling(1.0f, 16.0f * 1.5f, 125.0f).r[1]), XMVectorGetZ(XMMatrixScaling(1.0f, 16.0f * 1.5f, 125.0f).r[2]), 1.0f));
-
 	m_Wall_O1->Bounds = bound[0];//
-
 	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_O1.get());
-
 
 
 	auto m_Wall_2 = std::make_unique<RenderItem>();
@@ -2834,17 +2757,13 @@ void FinalApp::BuildRenderGate()
 	m_Wall_2->BaseVertexLocation = m_Wall_2->Geo->DrawArgs["m_Walls"].BaseVertexLocation;
 	XMStoreFloat3(&bound[1].Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-55.0f, 7.5f, -6.250f).r[3]), XMVectorGetY(XMMatrixTranslation(-55.0f, 7.5f, -6.250f).r[3]), XMVectorGetZ(XMMatrixTranslation(-55.0f, 7.5f, -6.250f).r[3]), 1.0f));
 	XMStoreFloat3(&bound[1].Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(1.0f, 16.0f * 1.5f, 125.0f).r[0]), XMVectorGetY(XMMatrixScaling(1.0f, 16.0f * 1.5f, 125.0f).r[1]), XMVectorGetZ(XMMatrixScaling(1.0f, 16.0f * 1.5f, 125.0f).r[2]), 1.0f));
-
 	m_Wall_2->Bounds = bound[1];//
-
 	mRitemLayer[(int)RenderLayer::Opaque].push_back(m_Wall_2.get());
-
-	
 
 	auto m_Wall_4 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&m_Wall_4->TexTransform, XMMatrixScaling(9.0f, 5.0f, 1.0f));
 	XMStoreFloat4x4(&m_Wall_4->World, XMMatrixScaling(110.0f, 4.0f, 0.1f) * XMMatrixTranslation(0.0f, 7.5f, 55.0f));
-	//XMStoreFloat4x4(&m_Wall_4->World, XMMatrixRotationY(rotAngle));
+
 	m_Wall_4->ObjCBIndex = objCBIndex++;
 	m_Wall_4->Mat = mMaterials["wall"].get();
 	m_Wall_4->Geo = mGeometries["m_Walls_Geo"].get();
@@ -2952,7 +2871,6 @@ void FinalApp::BuildRenderGate()
 	auto m_Wall_5_MAZE = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&m_Wall_5_MAZE->TexTransform, XMMatrixScaling(9.0f, 5.0f,6.0f));
 	XMStoreFloat4x4(&m_Wall_5_MAZE->World, XMMatrixScaling(50.0f, 4.0f, 0.1f)* XMMatrixTranslation(-30.9f, 7.5f, -67.6f));
-	//XMStoreFloat4x4(&m_Wall_4->World, XMMatrixRotationY(rotAngle));
 	m_Wall_5_MAZE->ObjCBIndex = objCBIndex++;
 	m_Wall_5_MAZE->Mat = mMaterials["wall"].get();
 	m_Wall_5_MAZE->Geo = mGeometries["m_Walls_Geo"].get();
@@ -3023,7 +2941,6 @@ void FinalApp::BuilRenderMaze()
 	UINT objCBIndex = 132;
 	auto boxRitem4 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&boxRitem4->World, XMMatrixScaling(3.0f, 15.0f, 20.0f) * XMMatrixTranslation(-7.0f, 5.0f, -78.0f));
-
 	XMStoreFloat4x4(&boxRitem4->TexTransform, XMMatrixScaling(2.0f, 4.0f, 0.00f));
 	boxRitem4->ObjCBIndex = objCBIndex++;
 	boxRitem4->Mat = mMaterials["bush"].get();
@@ -3032,11 +2949,9 @@ void FinalApp::BuilRenderMaze()
 	boxRitem4->IndexCount = boxRitem4->Geo->DrawArgs["mazeWall"].IndexCount;
 	boxRitem4->StartIndexLocation = boxRitem4->Geo->DrawArgs["mazeWall"].StartIndexLocation;
 	boxRitem4->BaseVertexLocation = boxRitem4->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
-
 	BoundingBox boundsMaze;
 	XMStoreFloat3(&boundsMaze.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-7.0f, 5.0f, -78.0f).r[3]), XMVectorGetY(XMMatrixTranslation(-7.0f, 5.0f, -78.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(-7.0f, 5.0f, -78.0f).r[3]), 1.0f));
 	XMStoreFloat3(&boundsMaze.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(3.0f, 15.0f, 1.0f).r[0]), XMVectorGetY(XMMatrixScaling(3.0f, 15.0f, 1.0f).r[1]), XMVectorGetZ(XMMatrixScaling(3.0f, 15.0f, 1.0f).r[2]), 1.0f));
-
 	boxRitem4->Bounds = boundsMaze;//
 
 	mRitemLayer[(int)RenderLayer::Opaque].push_back(boxRitem4.get());
@@ -3046,7 +2961,6 @@ void FinalApp::BuilRenderMaze()
 	
 	auto boxRitem5 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&boxRitem5->World, XMMatrixScaling(3.0f, 15.0f, 29.0f) * XMMatrixTranslation(7.0f, 5.0f, -83.0f));
-
 	XMStoreFloat4x4(&boxRitem5->TexTransform, XMMatrixScaling(2.0, 4.0f, 2.0f));
 	boxRitem5->ObjCBIndex = objCBIndex++;
 	boxRitem5->Mat = mMaterials["bush"].get();
@@ -3055,11 +2969,9 @@ void FinalApp::BuilRenderMaze()
 	boxRitem5->IndexCount = boxRitem5->Geo->DrawArgs["mazeWall"].IndexCount;
 	boxRitem5->StartIndexLocation = boxRitem5->Geo->DrawArgs["mazeWall"].StartIndexLocation;
 	boxRitem5->BaseVertexLocation = boxRitem5->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
-
 	BoundingBox boundsMaze2;
 	XMStoreFloat3(&boundsMaze2.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(7.0f, 5.0f, -83.0f).r[3]), XMVectorGetY(XMMatrixTranslation(7.0f, 5.0f, -83.0f).r[3]), XMVectorGetZ(XMMatrixTranslation(7.0f, 5.0f, -83.0f).r[3]), 1.0f));
 	XMStoreFloat3(&boundsMaze2.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(3.0f, 15.0f, 29.0f).r[0]), XMVectorGetY(XMMatrixScaling(3.0f, 15.0f, 29.0f).r[1]), XMVectorGetZ(XMMatrixScaling(3.0f, 15.0f, 29.0f).r[2]), 1.0f));
-
 	boxRitem5->Bounds = boundsMaze2;//
 
 	mRitemLayer[(int)RenderLayer::Opaque].push_back(boxRitem5.get());
@@ -3254,21 +3166,14 @@ void FinalApp::BuilRenderMaze()
 	mazeWallLeft3->IndexCount = mazeWallLeft3->Geo->DrawArgs["mazeWall"].IndexCount;
 	mazeWallLeft3->StartIndexLocation = mazeWallLeft3->Geo->DrawArgs["mazeWall"].StartIndexLocation;
 	mazeWallLeft3->BaseVertexLocation = mazeWallLeft3->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
-
 	BoundingBox boundsMaze11;
-	
 	//HEAD
 	XMStoreFloat3(&boundsMaze11.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-23.5f, 5.0f, -156.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-23.5f, 5.0f, -156.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-23.5f, 5.0f, -156.5f).r[3]), 1.0f));
-//
-	
-
 	XMStoreFloat3(&boundsMaze11.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[0]), XMVectorGetY(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[1]), XMVectorGetZ(XMMatrixScaling(40.0f, 15.0f, 3.0f).r[2]), 1.0f));
 
 	mazeWallLeft3->Bounds = boundsMaze11;//
-
 	mRitemLayer[(int)RenderLayer::Opaque].push_back(mazeWallLeft3.get());
 	mAllRitems.push_back(std::move(mazeWallLeft3));
-
 
 	auto mazeWallLeft4 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&mazeWallLeft4->World, XMMatrixScaling(3.0f, 15.0f, 20.0f)* XMMatrixTranslation(-11.5f, 5.0f, -135.5f));
@@ -3282,17 +3187,12 @@ void FinalApp::BuilRenderMaze()
 	mazeWallLeft4->BaseVertexLocation = mazeWallLeft4->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
 
 	BoundingBox boundsMaze12;
-
 	XMStoreFloat3(&boundsMaze12.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-11.5f, 5.0f, -135.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-11.5f, 5.0f, -135.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-11.5f, 5.0f, -135.5f).r[3]), 1.0f));
-
 	XMStoreFloat3(&boundsMaze12.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[0]), XMVectorGetY(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[1]), XMVectorGetZ(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[2]), 1.0f));
 
 	mazeWallLeft4->Bounds = boundsMaze12;//
-
 	mRitemLayer[(int)RenderLayer::Opaque].push_back(mazeWallLeft4.get());
 	mAllRitems.push_back(std::move(mazeWallLeft4));
-
-
 
 	auto mazeWallLeft5 = std::make_unique<RenderItem>();
 	XMStoreFloat4x4(&mazeWallLeft5->World, XMMatrixScaling(3.0f, 15.0f, 20.0f)* XMMatrixTranslation(1.5f, 5.0f, -135.5f));
@@ -3308,9 +3208,7 @@ void FinalApp::BuilRenderMaze()
 	BoundingBox boundsMaze13;
 	XMStoreFloat3(&boundsMaze13.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(1.5f, 5.0f, -135.5f).r[3]), XMVectorGetY(XMMatrixTranslation(1.5f, 5.0f, -135.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(1.5f, 5.0f, -135.5f).r[3]), 1.0f));
 	XMStoreFloat3(&boundsMaze13.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[0]), XMVectorGetY(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[1]), XMVectorGetZ(XMMatrixScaling(3.0f, 15.0f, 20.0f).r[2]), 1.0f));
-
 	mazeWallLeft5->Bounds = boundsMaze13;//
-
 	mRitemLayer[(int)RenderLayer::Opaque].push_back(mazeWallLeft5.get());
 	mAllRitems.push_back(std::move(mazeWallLeft5));
 
@@ -3371,10 +3269,7 @@ void FinalApp::BuilRenderMaze()
 	mazeWallLeft8->IndexCount = mazeWallLeft8->Geo->DrawArgs["mazeWall"].IndexCount;
 	mazeWallLeft8->StartIndexLocation = mazeWallLeft8->Geo->DrawArgs["mazeWall"].StartIndexLocation;
 	mazeWallLeft8->BaseVertexLocation = mazeWallLeft8->Geo->DrawArgs["mazeWall"].BaseVertexLocation;
-
 	BoundingBox boundsMaze16;
-
-	//HEAD
 	XMStoreFloat3(&boundsMaze16.Center, XMVectorSet(XMVectorGetX(XMMatrixTranslation(-24.5f, 5.0f, -135.5f).r[3]), XMVectorGetY(XMMatrixTranslation(-24.5f, 5.0f, -135.5f).r[3]), XMVectorGetZ(XMMatrixTranslation(-24.5f, 5.0f, -135.5f).r[3]), 1.0f));
 	XMStoreFloat3(&boundsMaze16.Extents, 0.5f * XMVectorSet(XMVectorGetX(XMMatrixScaling(25.0f, 15.0f, 3.0f).r[0]), XMVectorGetY(XMMatrixScaling(25.0f, 15.0f, 3.0f).r[1]), XMVectorGetZ(XMMatrixScaling(25.0f, 15.0f, 3.0f).r[2]), 1.0f));
 
@@ -3464,8 +3359,6 @@ void FinalApp::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::ve
 
 std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> FinalApp::GetStaticSamplers()
 {
-	// Applications usually only need a handful of samplers.  So just define them all up front
-	// and keep them available as part of the root signature.  
 
 	const CD3DX12_STATIC_SAMPLER_DESC pointWrap(
 		0, // shaderRegister
